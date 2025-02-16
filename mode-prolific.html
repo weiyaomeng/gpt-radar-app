@@ -148,42 +148,76 @@
       .slider-container {
           position: relative;
           width: 100%;
-          max-width: 500px;
-          margin: auto;
+          max-width: 600px;
+          margin: 20px auto;
+          text-align: center;
       }
 
+      /* ✅ Styling the slider */
       input[type="range"] {
-          width: 100%;
-          margin: 10px 0;
-          position: relative;
-          z-index: 2;
-      }
+            width: 100%;
+            appearance: none;
+            height: 6px;
+            background: linear-gradient(to right, #007bff 0%, #ddd 0%);
+            border-radius: 5px;
+            outline: none;
+            transition: 0.3s;
+            position: relative;
+            z-index: 2;
+        }
 
-      .slider-ticks {
-          position: absolute;
-          width: 100%;
-          top: 35px;
-          display: flex;
-          justify-content: space-between;
-          font-size: 18px;
-          color: #555;
-      }
+        /* ✅ Style the thumb (handle) */
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            transition: 0.2s;
+        }
 
-      .slider-labels {
-          position: absolute;
-          width: 100%;
-          top: 50px;
-          display: flex;
-          justify-content: space-between;
-          font-size: 14px;
-          color: #555;
-      }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
 
-      .slider-labels span, .slider-ticks span {
-          position: relative;
-          transform: translateX(-50%);
-          white-space: nowrap;
-      }
+        /* ✅ Thumb Hover Effect */
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #0056b3;
+        }
+
+        /* ✅ Tick Marks */
+        .slider-ticks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: -10px;
+            font-size: 20px;
+            color: #333;
+            padding: 0 10px;
+        }
+
+        /* ✅ Labels with Even Spacing */
+        .slider-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+            padding: 0 5px;
+        }
+
+        .slider-scale span {
+            flex-grow: 1;  /* Equal spacing */
+            text-align: center;
+            min-width: 80px;  /* Prevents labels from getting too narrow */
+            white-space: nowrap;
+        }
 
       .hidden {
           display: none;
@@ -238,8 +272,10 @@
         background-color: white;
         padding: 20px;
         border-radius: 10px;
-        width: 50%;
-        text-align: center;
+        width: 60%; /* Adjust width as needed */
+        max-height: 80vh; /* Ensures it fits within the screen */
+        overflow-y: auto; /* Enables scrolling if content is too long */
+        text-align: left;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
 
@@ -259,9 +295,20 @@
         cursor: not-allowed;
     }
 
+    #studyContainer {
+        display: none;
+    }
+
+
 
       /* ✅ Mobile Responsive Fix */
       @media (max-width: 768px) {
+            .slider-scale {
+                font-size: 12px;
+            }
+            .slider-scale span {
+                min-width: 60px;
+            }
           .review-content {
               flex-direction: column;
               align-items: center;
@@ -312,19 +359,26 @@
 
     <!-- Info Collection Container -->
     <div class="container hidden" id="infoCollectionContainer">
-        <h1>Information Collection</h1>
-        <p>Please answer the following questions before proceeding:</p>
+        <h1>Pre-Task Questionnaire</h1>
+        <p>Before starting, please answer a few quick questions about your experience with AI and Large Language Models (LLMs).</p>
         
         <!-- Familiarity with LLMs -->
         <label for="llmFamiliarity"><strong>1. How familiar are you with Large Language Models (LLMs)?</strong></label>
         <div class="slider-container">
-            <input type="range" id="llmFamiliarity" class="slider" min="1" max="5" step="1" value="3" oninput="updateFamiliarityValue(this.value)">
-            <div class="slider-labels">
-                <span style="left: 0%">Never used</span>
-                <span style="left: 25%">Heard of it</span>
-                <span style="left: 50%">Occasionally used</span>
-                <span style="left: 75%">Regular user</span>
-                <span style="left: 100%">Use professionally</span>
+            <input type="range" id="llmFamiliarity" class="slider" min="1" max="5" step="1" value="3" oninput="updateFamiliarityValue(this.value)" onchange="updateSliderFill()">
+            
+            <!-- Tick Marks -->
+            <div class="slider-ticks">
+                <span>|</span><span>|</span><span>|</span><span>|</span><span>|</span>
+            </div>
+
+            <!-- Labels for Each Tick -->
+            <div class="slider-scale">
+                <span>Never used</span>
+                <span>Heard of it</span>
+                <span>Occasionally used</span>
+                <span>Regular user</span>
+                <span>Use professionally</span>
             </div>
         </div>
         <br><br>
@@ -333,12 +387,12 @@
         <br><br>
 
         <!-- Usage of LLMs -->
-        <label for="llmUsage"><strong>2. What do you use LLMs for?</strong></label><br>
-        <textarea id="llmUsage" placeholder="Enter your response here..." rows="4" cols="50"></textarea>
+        <label for="llmUsage"><strong>2. How do you use LLMs in your daily life or work?</strong></label><br>
+        <textarea id="llmUsage" placeholder="Briefly describe your experience with LLMs..." rows="4" cols="50"></textarea>
 
         <br><br>
         <!-- <button onclick="submitInfoToGoogleForm()">Start Review Task</button> -->
-        <button onclick="submitInfoCollection()">Start Review Task</button>
+        <button onclick="submitInfoCollection()">Start the Challenge</button>
     </div>
 
     <!-- Instructions Container (Initially Hidden) -->
@@ -396,7 +450,16 @@
 
         function updateFamiliarityValue(value) {
             document.getElementById("familiarityValue").textContent = familiarityLabels[value];
+            updateSliderFill();
         }
+
+        function updateSliderFill() {
+            let slider = document.getElementById("llmFamiliarity");
+            let percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.background = `linear-gradient(to right, #007bff ${percentage}%, #ddd ${percentage}%)`;
+        }
+
+        window.onload = updateSliderFill;
 
         function showInfoCollection() {
             // dataLoad();
@@ -905,41 +968,42 @@
                     document.getElementById('participantInfoContainer').innerHTML = html;
 
                     // Wait for modal to be inserted before setting up
-                    setTimeout(setupModal, 100);
+                    setTimeout(setupModals, 100);
                 })
                 .catch(error => console.error('Error loading participant info:', error));
         }
 
         // Function to handle modal behavior
-        function setupModal() {
-            const modal = document.getElementById("participantModal");
-            if (!modal) {
-                console.error("Modal element not found!");
-                return;
-            }
+        function setupModals() {
+            document.getElementById("readMoreButton").addEventListener("click", function () {
+                document.getElementById("initialMessage").style.display = "none"; // Hide first sentence
+                document.getElementById("fullInfo").style.display = "block"; // Show full information
+                this.style.display = "none"; // Hide "Read More" button
+            });
 
-            modal.style.display = "flex"; // Show modal
+            document.getElementById("agreeButton").addEventListener("click", function () {
+                document.getElementById("participantModal").style.display = "none";
+                document.getElementById("consentFormModal").style.display = "flex";
+            });
 
-            // Enable button only after checkbox is checked
-            const consentCheckbox = document.getElementById("consentCheckbox");
-            const agreeButton = document.getElementById("agreeButton");
-
-            if (consentCheckbox && agreeButton) {
-                consentCheckbox.addEventListener("change", function () {
-                    agreeButton.disabled = !this.checked;
+            document.querySelectorAll(".consent-checkbox").forEach(checkbox => {
+                checkbox.addEventListener("change", function () {
+                    const allChecked = [...document.querySelectorAll(".consent-checkbox")].every(cb => cb.checked);
+                    document.getElementById("finalConsentButton").disabled = !allChecked;
                 });
+            });
 
-                // Hide modal when user clicks "Continue"
-                agreeButton.addEventListener("click", function () {
-                    modal.style.display = "none";
-                });
-            } else {
-                console.error("Consent checkbox or agree button not found!");
-            }
+            document.getElementById("finalConsentButton").addEventListener("click", function () {
+                document.getElementById("consentFormModal").style.display = "none";
+                alert("Thank you! You will now start the study.");
+                document.getElementById("studyContainer").style.display = "block"; // Show study content
+                // Redirect or show next section
+            });
         }
 
         // Load the modal on page load
-        window.addEventListener("DOMContentLoaded", loadParticipantInfo);
+        // window.addEventListener("DOMContentLoaded", loadParticipantInfo);
+        window.onload = loadParticipantInfo;
 
 
 
