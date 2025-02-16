@@ -5,330 +5,262 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fake or Fact: Who Has Got the GPT Radar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    
     <style>
-      body {
-          font-family: 'Arial', sans-serif;
-          background-color: #f8f9fa;
-          color: #333;
-          margin: 0;
-          padding: 0;
-      }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333; /* Set a global text color for better readability */
+        }
 
-      .container {
-          width: 80%;
-          max-width: 1200px;
-          margin: 40px auto;
-          background: #fff;
-          padding: 30px;
-          border-radius: 8px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-          text-align: center;
-      }
+        .container {
+            width: 80%;
+            max-width: 1200px; /* Prevents the container from becoming too wide on large screens */
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-      h1, h2 {
-          font-size: 2.5em;
-          color: #007bff;
-          margin-bottom: 20px;
-          font-weight: 600;
-      }
+        h1, h2 {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: 600; /* Adds more emphasis to the titles */
+        }
 
-      .review-content {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 30px;
-          text-align: left;
-      }
+        .review-info .rating {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
 
-      .product-info {
-          flex: 1;
-          padding-right: 20px;
-          text-align: left;
-      }
+        .review-content {
+            display: flex;
+            justify-content: space-between; /* Spreads content to left and right */
+            margin-bottom: 30px;
+            text-align: left;
+        }
 
-      .review-info {
-          flex: 1.5;
-          padding-left: 20px;
-      }
+        .product-info {
+            flex: 1; /* Take up space on the left */
+            padding-right: 20px; /* Space between product info and review */
+            text-align: left;
+        }
 
-      .product-info h3 {
-          font-size: 1.8em;
-          color: #333;
-          margin-bottom: 10px;
-      }
+        .review-info {
+            flex: 1.5; /* Take up more space on the right */
+            padding-left: 20px;
+        }
 
-      .product-info p {
-          font-size: 1.1em;
-          color: #555;
-          margin-bottom: 15px;
-      }
+        .product-info h3 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+        }
 
-      .product-info img {
-          width: 100%;
-          max-width: 200px;
-          height: auto;
-          border-radius: 8px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+        .product-info p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 15px;
+        }
 
-      .review-info .review-title {
-          font-size: 1.3em;
-          font-weight: bold;
-          margin-bottom: 10px;
-      }
+        .product-info img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-      .review-info .review-text {
-          font-size: 1.1em;
-          color: #444;
-          line-height: 1.6;
-          margin-bottom: 15px;
-      }
+        .review-info .review-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: left;
+        }
 
-      .review-info .helpful {
-          font-size: 1em;
-          color: #777;
-      }
+        .review-info .review-text {
+            font-size: 1.1em;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: left;
+        }
 
-      .classification {
-          margin-top: 20px;
-          display: flex;
-          justify-content: center;
-          gap: 20px;
-      }
-
-      /* ✅ Fixed Button Styling */
-      button.real, button.fake {
-          font-size: 1.2em;
-          font-weight: bold;
-          padding: 12px 25px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: 0.3s;
-      }
-
-      button.real {
-          background-color: #28a745;
-          color: white;
-      }
-
-      button.fake {
-          background-color: #dc3545;
-          color: white;
-      }
-
-      button.real:hover, button.fake:hover {
-          opacity: 0.8;
-      }
-
-      button.next {
-          font-size: 1.2em;
-          font-weight: bold;
-          padding: 12px 25px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          background-color: #007bff;
-          color: white;
-          transition: 0.3s;
-          margin-top: 20px;
-      }
-
-      button.next:hover {
-          opacity: 0.8;
-      }
+        .review-info .helpful {
+            font-size: 1em;
+            color: #777;
+            text-align: left;
+        }
 
 
-      /* ✅ Confidence Level Slider */
-      .confidence-level {
-          text-align: center;
-          margin-top: 20px;
-      }
+        .classification {
+            margin-top: 20px;
+        }
 
-      .slider-container {
-          position: relative;
-          width: 100%;
-          max-width: 500px;
-          margin: auto;
-      }
+        .classification button {
+            padding: 12px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px;
+            width: 150px;
+        }
 
-      input[type="range"] {
-          width: 100%;
-          margin: 10px 0;
-          position: relative;
-          z-index: 2;
-      }
+        .classification button.machine {
+            background-color: #dc3545;
+        }
 
-      .slider-ticks {
-          position: absolute;
-          width: 100%;
-          top: 35px;
-          display: flex;
-          justify-content: space-between;
-          font-size: 18px;
-          color: #555;
-      }
+        .classification button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
 
-      .slider-labels {
-          position: absolute;
-          width: 100%;
-          top: 50px;
-          display: flex;
-          justify-content: space-between;
-          font-size: 14px;
-          color: #555;
-      }
+        .classification button.machine:hover {
+            background-color: #c82333;
+        }
 
-      .slider-labels span, .slider-ticks span {
-          position: relative;
-          transform: translateX(-50%);
-          white-space: nowrap;
-      }
+        /* Styling for the confidence level section */
+        .confidence-level {
+            margin-top: 20px;
+            text-align: left;
+        }
 
-      .hidden {
-          display: none;
-      }
+        .confidence-options {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 10px; /* Space between items */
+        }
 
-      /* Style the progress bar */
-      progress {
-          width: 100%; /* Full width */
-          height: 20px; /* Set the height of the bar */
-          border-radius: 10px; /* Rounded corners */
-          border: none; /* Remove default border */
-      }
-      /* Customize the color of the progress bar */
-      progress::-webkit-progress-bar {
-          background-color: #f3f3f3; /* Light grey background */
-          border-radius: 10px;
-      }
+        .confidence-options label {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
 
-      progress::-webkit-progress-value {
-          background-color: #28a745; /* Green color for progress */
-          border-radius: 10px;
-      }
+        .confidence-options input[type="radio"] {
+            margin-right: 10px; /* Space between radio button and label text */
+        }
 
-      /* For Firefox */
-      progress::-moz-progress-bar {
-          background-color: #28a745;
-          border-radius: 10px;
-      }
+        .confidence-options label:hover {
+            background-color: #e9ecef;
+            border-color: #007bff;
+        }
 
-      #reviewDataLength {
-          font-size: 1.2em;
-          color: #333;
-          margin-top: 20px;
-          font-weight: 600; /* Makes the review count stand out */
-      }
+        .confidence-options input[type="radio"]:checked + .confidence-label {
+            font-weight: bold;
+            color: #007bff;
+        }
 
-      /* ✅ Mobile Responsive Fix */
-      @media (max-width: 768px) {
-          .review-content {
-              flex-direction: column;
-              align-items: center;
-          }
 
-          .product-info {
-              text-align: center;
-              margin-bottom: 20px;
-          }
+        /* Style the progress bar */
+        progress {
+            width: 100%; /* Full width */
+            height: 20px; /* Set the height of the bar */
+            border-radius: 10px; /* Rounded corners */
+            border: none; /* Remove default border */
+        }
 
-          .review-info {
-              padding-left: 0;
-          }
+        /* Customize the color of the progress bar */
+        progress::-webkit-progress-bar {
+            background-color: #f3f3f3; /* Light grey background */
+            border-radius: 10px;
+        }
 
-          .classification {
-              flex-direction: column;
-          }
+        progress::-webkit-progress-value {
+            background-color: #28a745; /* Green color for progress */
+            border-radius: 10px;
+        }
 
-          .classification button {
-              width: 100%;
-          }
-      }
+        /* For Firefox */
+        progress::-moz-progress-bar {
+            background-color: #28a745;
+            border-radius: 10px;
+        }
 
+        #reviewDataLength {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 20px;
+            font-weight: 600; /* Makes the review count stand out */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile-friendly adjustments */
+        @media (max-width: 768px) {
+            .review-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .product-info {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .review-info {
+                padding-left: 0;
+            }
+
+            .classification button {
+                width: 100%; /* Makes buttons full-width on smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Welcome Container -->
     <div class="container" id="welcomeContainer">
-        <h1>Fake or Fact: Who Has Got the GPT Radar?</h1>
-        <h2 style="font-size: 1.5em; color: #007bff;margin-bottom: 20px;">Data Collection via Prolific</h2>
-        <p style="margin-bottom: 20px; font-size: 1.2em; color: #555;">Enter your Prolific ID to start the challenge:</p>
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 400px; margin: 0 auto;">
-            <input 
-                type="text" 
-                id="userName" 
-                placeholder="Your Prolific ID" 
-                style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" 
-            />
-            <button 
-                onclick="showInfoCollection()" 
-                style="width: 100%; padding: 12px; font-size: 1.1rem; cursor: pointer; border: none; border-radius: 5px; background-color: #007bff; color: white; transition: background-color 0.3s ease;">
-                Enter
-            </button>
-        </div>
+        <header>
+            <h1>Fake or Fact: Who Has Got the GPT Radar?</h1>
+        </header>
+        <main>
+            <section class="instructions">
+                <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
+                    You will be presented with one review at a time.
+                </p>
+                <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
+                    Your task is to decide whether the review is human-written (Real) or generated by GPT (Machine Generated). Additionally, you will indicate your confidence level in each decision.
+                </p>
+                <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
+                    Note: Refreshing or leaving the page will reset your progress, requiring you to start over. Please avoid refreshing or navigating away during the challenge.
+                </p>
+            </section>
+            <section class="start">
+                <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">Enter your name to begin the challenge:</p>
+                <div class="input-group" style="max-width: 600px; margin: 20px auto; display: flex; justify-content: space-between; gap: 10px;">
+                    <input type="text" id="userName" placeholder="Your name" aria-label="Enter your name" style="flex: 1; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" />
+                    <button type="button" onclick="startChallenge()" style="padding: 12px 20px; font-size: 1rem; cursor: pointer; border: none; border-radius: 5px; background-color: #007bff; color: white;">
+                        Start Challenge
+                    </button>
+                </div>
+            </section>
+        </main>
     </div>
+    
+    
+    
 
-    <!-- Info Collection Container -->
-    <div class="container hidden" id="infoCollectionContainer">
-        <h1>Information Collection</h1>
-        <p>Please answer the following questions before proceeding:</p>
-        
-        <!-- Familiarity with LLMs -->
-        <label for="llmFamiliarity"><strong>1. How familiar are you with Large Language Models (LLMs)?</strong></label>
-        <div class="slider-container">
-            <input type="range" id="llmFamiliarity" class="slider" min="1" max="5" step="1" value="3" oninput="updateFamiliarityValue(this.value)">
-            <div class="slider-labels">
-                <span style="left: 0%">Never used</span>
-                <span style="left: 25%">Heard of it</span>
-                <span style="left: 50%">Occasionally used</span>
-                <span style="left: 75%">Regular user</span>
-                <span style="left: 100%">Use professionally</span>
-            </div>
-        </div>
-        <br><br>
-        <p><strong>Your selection:</strong> <span id="familiarityValue">Occasionally used</span></p>
-
-        <br><br>
-
-        <!-- Usage of LLMs -->
-        <label for="llmUsage"><strong>2. What do you use LLMs for?</strong></label><br>
-        <textarea id="llmUsage" placeholder="Enter your response here..." rows="4" cols="50"></textarea>
-
-        <br><br>
-        <!-- <button onclick="submitInfoToGoogleForm()">Start Review Task</button> -->
-        <button onclick="submitInfoCollection()">Start Review Task</button>
-    </div>
-
-    <!-- Instructions Container (Initially Hidden) -->
-    <div class="container hidden" id="instructionsContainer">
-        <h1>Instructions</h1>
-        
-        <section class="instructions">
-            <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                You will be presented with one review at a time.
-            </p>
-            <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                Your task is to decide whether the review is human-written (Real) or generated by GPT (Machine Generated). Additionally, you will indicate your confidence level in each decision.
-            </p>
-            <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                <strong>Note:</strong> Refreshing or leaving the page will reset your progress, requiring you to start over. Please avoid refreshing or navigating away during the challenge.
-            </p>
-        </section>
-
-        <!-- <button onclick="dataReadyCheck()">Continue</button> -->
-        <button onclick="startReviewTask()">Continue</button>
-
-    </div>
-
-    <!-- Review Container -->
     <div class="container hidden" id="reviewContainer">
         <h1>Fake or Fact: Who Has Got the GPT Radar?</h1>
         <h2 id="welcomeMessage"></h2>
         <p id="reviewDataLength"></p>
         <progress id="progressBar" value="0" max="100"></progress>
         <div id="reviewContent"></div>
-        <p id="loadingMessage" class="hidden" style="font-size: 1.2em; color: #007bff;">Loading data... Please wait.</p>
-
     </div>
 
     <script>
@@ -336,248 +268,59 @@
         let reviewData = [];
         let currentReviewIndex = 0;
         let userName = "";
-        let correctLabels = 0;
-        let llmFamiliarity = 3;
-        let llmFamiliarityText = "Occasionally used";
-        let llmUsage = "";
-        let selectedDecision = "";
-        let selectedConfidence = "Moderately Confident"; // Default confidence level
+        let correctLabels = 0; // Add counter for correct labels
 
-        /*Information collection part */
-        const familiarityLabels = {
-            "1": "Never used",
-            "2": "Heard of it",
-            "3": "Occasionally used",
-            "4": "Regular user",
-            "5": "Use professionally"
-        };
-
-        function updateFamiliarityValue(value) {
-            document.getElementById("familiarityValue").textContent = familiarityLabels[value];
-        }
-
-        function showInfoCollection() {
-            // dataLoad();
-            const input = document.getElementById('userName');
-            if (!input.value.trim()) {
-                alert("Please enter your Prolific ID to continue.");
-                return;
-            }
-            userName = input.value.trim();
-            document.getElementById('welcomeContainer').classList.add('hidden');
-            document.getElementById('infoCollectionContainer').classList.remove('hidden');
-            // dataLoad();
-        }
-
-        function submitInfoToGoogleForm(userName0, llmFamiliarityText0, llmUsage0) {
-            if (!userName0 || !llmFamiliarityText0 || !llmUsage0) {
-                alert("Please complete all fields before proceeding.");
-                return;
-            }
-            // Replace with your actual Google Form URL
-            const googleFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSe9ki7B6M3fpShtphj1Qi5kKW6OPWV7PAqqrUBwde8JqX5lxQ/formResponse";
-            // Replace with actual entry IDs from your form
-            const formData = new URLSearchParams();
-            formData.append("entry.1044300960", userName0);        // Participant ID
-            formData.append("entry.2068983905", llmFamiliarityText0); // Familiarity Level
-            formData.append("entry.144535932", llmUsage0);        // Usage Purpose
-
-            // Send the data to Google Form
-            fetch(googleFormURL, {
-                method: "POST",
-                body: formData,
-                mode: "no-cors" // Ensures silent submission without CORS issues
-            }).then(() => {
-                console.log("Data submitted successfully!");
-            }).catch(error => {
-                console.error("Error submitting data:", error);
-                alert("Failed to submit data. Please try again.");
+        function loadMetaData() {
+            console.log("Loading meta data...");
+            // Papa.parse("data/meta_with_images.csv", {
+            Papa.parse("data/data_metadata_more.csv", {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                complete: function(results) {
+                    productData = results.data;
+                    console.log("Meta Data Loaded:", productData);
+                    loadReviewData();
+                },
+                error: function(error) {
+                    console.error("Error loading meta data:", error);
+                }
             });
         }
 
-        function submitInfoCollection() {
-            llmFamiliarity = document.getElementById('llmFamiliarity').value;
-            llmUsage = document.getElementById('llmUsage').value.trim();
-
-            if (!llmFamiliarity || !llmUsage) {
-                alert("Please complete both questions before proceeding.");
-                return;
-            }
-
-            llmFamiliarityText = document.getElementById("familiarityValue").textContent;
-            submitInfoToGoogleForm(userName, llmFamiliarityText, llmUsage);
-
-            // Hide info collection container, show review task
-            document.getElementById('welcomeMessage').textContent = `Welcome, ${userName}!`;
-            document.getElementById('infoCollectionContainer').classList.add('hidden');
-            document.getElementById('instructionsContainer').classList.remove('hidden');     
-            dataLoad();       
-        }
-
-        /* Instruction view*/
-        // function dataLoad() {
-        //     // Load both metadata and review data in parallel
-        //     Promise.all([
-        //         new Promise(resolve => google.script.run.withSuccessHandler((data) => {
-        //             processMetaData(data);
-        //             resolve();
-        //         }).getCSVData()),
-        //         new Promise(resolve => google.script.run.withSuccessHandler((data) => {
-        //             processReviewData(data);
-        //             resolve();
-        //         // }).getReviewData())
-        //         }).getUserReviewData(userName))
-        //     ]).then(() => {
-        //         dataReadyCheck(); // Start checking only after both data sets load
-        //     }).catch(error => {
-        //         console.error("Error loading data:", error);
-        //     });
-        // }
-        function dataLoad() {
-            console.log("Fetching data for user:", userName);
-
-            // Load both metadata and randomly sampled review data
-            Promise.all([
-                new Promise(resolve => google.script.run.withSuccessHandler((data) => {
-                    console.log("Meta Data Received:", data);
-                    processMetaData(data);
-                    resolve();
-                }).getCSVData_public()),
-
-                new Promise(resolve => google.script.run.withSuccessHandler((data) => {
-                    console.log("Review Data Received:", data);
-                    if (data.length === 0) {
-                        console.error("Error: No review data received from server.");
-                        document.getElementById("loadingMessage").innerText = "Error loading reviews. Please refresh and try again.";
-                        return;
-                    }
-                    processReviewData(data);
-                    resolve();
-                }).getUserReviewData_public()) // Call function to fetch random reviews
-            ]).then(() => {
-                dataReadyCheck(); // Start checking only after both datasets are loaded
-            }).catch(error => {
-                console.error("Error loading data:", error);
+        function loadReviewData() {
+            console.log("Loading review data...");
+            // Papa.parse("data/review.csv", {
+            Papa.parse("data/ready_review_new_10.csv", {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                complete: function(results) {
+                    reviewData = results.data;
+                    console.log("Review Data Loaded:", reviewData);
+                    console.log("Number of reviews:", reviewData.length);
+                    // document.getElementById('reviewDataLength').textContent = `You will be reviewing ${reviewData.length} reviews.`;
+                    renderReviews();
+                },
+                error: function(error) {
+                    console.error("Error loading review data:", error);
+                }
             });
         }
-
-
-
-        function startReviewTask() {
-            // Hide instructions, show review section
-            document.getElementById('instructionsContainer').classList.add('hidden');
-            document.getElementById('reviewContainer').classList.remove('hidden');
-            // startReviewTask();
-            dataReadyCheck();
-        }
-
-        let metaDataLoaded = false;
-        let reviewDataLoaded = false;
-
-        function dataReadyCheck() {
-            // startReviewTask();
-            if (metaDataLoaded && reviewDataLoaded) {
-                document.getElementById("loadingMessage").classList.add("hidden"); // Hide the loading message
-                renderReviews(); // Render reviews once all data is ready
-            } else {
-                document.getElementById("loadingMessage").classList.remove("hidden"); // Show pending message
-                setTimeout(dataReadyCheck, 500); // Check again after 500ms
+        // Ensure the images field is correctly formatted
+        function sanitizeImagesField(imagesField) {
+            if (typeof imagesField === 'string') {
+                try {
+                    // Try to parse the images field as JSON, if it fails, sanitize it
+                    // Ensure single quotes are replaced with double quotes for valid JSON
+                    let sanitizedField = imagesField.replace(/'/g, '"'); // Replace single quotes with double quotes
+                    return JSON.parse(sanitizedField);
+                } catch (e) {
+                    console.error('Error parsing images:', e);
+                    return []; // Return an empty array in case of an error
+                }
             }
-        }
-
-
-        /* Review view-----important--Data part*/
-        /* Review view-----important-----load product info*/
-        // function loadMetaData() {
-        //     google.script.run.withSuccessHandler(processMetaData).getCSVData();
-        // }
-        function processMetaData(data) {
-            if (!data || data.length === 0) {
-                console.error("No metadata received.");
-                return;
-            }
-
-            console.log("Raw product data:", data); // Debugging
-
-            // Convert CSV data from array format to object format
-            const headers = data[0]; // First row as column headers
-            productData = data.slice(1).map(row => {
-                let obj = {};
-                headers.forEach((header, index) => {
-                    obj[header] = row[index]; // Assign values to keys
-                });
-                return obj;
-            });
-
-            console.log("Processed product data:", productData); // Debugging
-
-            // loadReviewData();
-            metaDataLoaded = true; // Mark metadata as loaded
-            // dataReadyCheck(); // Check if both data sets are ready
-        }
-
-
-        /* Review view-----important-----load product reviews*/
-        function processReviewData(data) {
-          if (!data || data.length === 0) {
-              console.error("No review data received.");
-              return;
-          }
-
-          console.log("Raw review data:", data);
-
-          // Convert CSV data to object format
-          const headers = data[0]; // First row as column headers
-          reviewData = data.slice(1).map(row => {
-              let obj = {};
-              headers.forEach((header, index) => {
-                  obj[header] = row[index]; // Assign values to keys
-              });
-              return obj;
-          });
-
-          console.log("Processed review data:", reviewData);
-
-          // renderReviews();
-          reviewDataLoaded = true; // Mark review data as loaded
-          // dataReadyCheck(); // Check if both data sets are ready
-        }
-
-
-        const confidenceLabels = {
-            "1": "Not Confident",
-            "2": "Slightly Confident",
-            "3": "Moderately Confident",
-            "4": "Confident",
-            "5": "Extremely Confident"
-        };
-
-        // Step 2: Update Confidence Level
-        function updateConfidenceLabel(value) {
-            selectedConfidence = confidenceLabels[value];
-            document.getElementById("confidenceLabel").textContent = selectedConfidence;
-            document.getElementById("nextButtonSection").classList.remove("hidden"); // Show Next button
-        }
-
-        function getSelectedConfidence() {
-            const confidenceRadios = document.querySelectorAll('input[name="confidenceLevel"]:checked');
-            return confidenceRadios.length > 0 ? confidenceRadios[0].value : "No Confidence Selected";
-        }
-
-        // Step 1: Select Fake or Real
-        // function selectDecision(decision) {
-        //     selectedDecision = decision;
-        //     document.getElementById("confidenceSection").classList.remove("hidden"); // Show confidence slider
-        // }
-        function selectDecision(decision) {
-            selectedDecision = decision;
-
-            // Display the selection to the user
-            document.getElementById("userSelection").innerHTML = `You selected: <strong>${decision}</strong>`;
-            document.getElementById("userSelection").classList.remove("hidden"); // Make sure it's visible
-
-            // Show confidence slider
-            document.getElementById("confidenceSection").classList.remove("hidden");
+            return imagesField || []; // Return the original value or an empty array if it's invalid
         }
 
         function renderReviews() {
@@ -598,89 +341,137 @@
                 return;
             }
 
-            let featuresHTML = product.features 
-                ? Array.isArray(product.features) 
-                    ? product.features.map(feature => `<li>${feature}</li>`).join('')
-                    : `<li>${product.features}</li>` 
-                : "<li>No features available</li>";
+            let featuresHTML = '';
+            if (product.features) {
+                if (typeof product.features === 'string') {
+                    try {
+                        featuresHTML = JSON.parse(product.features).map(feature => `<li>${feature}</li>`).join('');
+                    } catch (e) {
+                        featuresHTML = "<li>Invalid features format</li>";
+                    }
+                } else if (Array.isArray(product.features)) {
+                    featuresHTML = product.features.map(feature => `<li>${feature}</li>`).join('');
+                } else {
+                    featuresHTML = "<li>No features available</li>";
+                }
+            } else {
+                featuresHTML = "<li>No features available</li>";
+            }
 
-            const productImageUrl = product.image_url || "https://via.placeholder.com/200"; // Fallback image
+            const productImageUrl = product.image_url;
+            console.log("Product Image URL:", productImageUrl);
 
             const reviewHTML = `
-                <div class="review-content">
-                    <div class="product-info">
-                        <h3>${product.title}</h3>
-                        <p><strong>Price:</strong> £${product.price}</p>
-                        <p><strong>Rating:</strong> ${product.average_rating} (${product.rating_number} reviews)</p>
-                        <div class="product-image">
-                            <img src="${productImageUrl}" alt="${product.title}">
+                <div class="review">
+                    <!-- Container for Left and Right Layout -->
+                    <div class="review-content">
+                        <!-- Left Side: Product Info -->
+                        <div class="product-info">
+                            <!-- Product Title -->
+                            <div class="review-title">${product.title}</div>
+
+                            <!-- Product Price and Rating -->
+                            <p><strong>Price:</strong> £${product.price}</p>
+                            <p><strong>Rating:</strong> ${product.average_rating} (${product.rating_number} reviews)</p>
+
+                            <!-- Display Product Image -->
+                            <div class="product-image">
+                                <img src="${productImageUrl}" alt="${product.title}" style="width: 200px; height: auto;">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="review-info">
-                      <div class="rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
-                      <h3 class="review-title">${review.title}</h3>
-                      <p class="review-text">${review.text}</p>
-                      <p class="helpful">${review.helpful_vote} people found this helpful</p>
+                        <!-- Right Side: Review Content -->
+                        <div class="review-info">
+                            <div class="rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                            <div class="review-title">${review.title}</div>
+                            <div class="review-text">${review.text}</div>
+                            <div class="helpful">${review.helpful_vote} people found this helpful</div>
 
-                      <!-- Step 1: Select Fake or Real -->
-                      <div class="classification">
-                          <button class="real" onclick="selectDecision('Real')">Real</button>
-                          <button class="fake" onclick="selectDecision('Fake')">Fake</button>
-                      </div>
-                      <p id="userSelection" class="hidden" margin-top: 10px;"></p>
+                            <!-- Buttons for Confidence level -->
+                            <!-- 
+                            <div>
+                                <label><input type="radio" name="confidenceLevel" value="Not Confident: This is purely a guess."> Not Confident: This is purely a guess.</label><br>
+                                <label><input type="radio" name="confidenceLevel" value="Slightly Confident: I think it might be correct."> Slightly Confident: I think it might be correct.</label><br>
+                                <label><input type="radio" name="confidenceLevel" value="Moderately Confident: I'm somewhat sure of my answer."> Moderately Confident: I'm somewhat sure of my answer.</label><br>
+                                <label><input type="radio" name="confidenceLevel" value="Confident: I'm pretty sure my answer is correct."> Confident: I'm pretty sure my answer is correct.</label><br>
+                                <label><input type="radio" name="confidenceLevel" value="Extremely Confident: I am certain my answer is correct."> Extremely Confident: I am certain my answer is correct.</label>
+                            </div>
+                            -->
+                            <div class="confidence-level">
+                                <p><strong>Select your confidence level:</strong></p>
+                                <div class="confidence-options">
+                                    <label>
+                                        <input type="radio" name="confidenceLevel" value="Not Confident">
+                                        <span class="confidence-label">Not Confident: This is purely a guess.</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="confidenceLevel" value="Slightly Confident">
+                                        <span class="confidence-label">Slightly Confident: I think it might be correct.</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="confidenceLevel" value="Moderately Confident">
+                                        <span class="confidence-label">Moderately Confident: I'm somewhat sure of my answer.</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="confidenceLevel" value="Confident">
+                                        <span class="confidence-label">Confident: I am certain my answer is correct.</span>
+                                    </label>
+                                </div>
+                            </div>
 
-                      <!-- Step 2: Confidence Level (Appears after selection) -->
-                      <div id="confidenceSection" class="hidden">
-                          <p><strong>Select your confidence level:</strong></p>
-                          <div class="slider-container">
-                              <input type="range" id="confidenceSlider" min="1" max="5" step="1" value="3" oninput="updateConfidenceLabel(this.value)">
-                              <div class="slider-ticks">
-                                  <span>|</span><span>|</span><span>|</span><span>|</span><span>|</span>
-                              </div>
-                              <div class="slider-labels">
-                                  <span>Not Confident</span>
-                                  <span>Slightly Confident</span>
-                                  <span>Moderately Confident</span>
-                                  <span>Confident</span>
-                                  <span>Extremely Confident</span>
-                              </div>
-                          </div>
-                          <br><br>
-                          <p><strong>Your selection:</strong> <span id="confidenceLabel">Moderately Confident</span></p>
-                      </div>
+                            <!-- Buttons for Classification -->
+                            <div class="classification">
+                                <button class="real" onclick="submitToForm('Real', '${review.id || review.parent_asin}', '${review.label}')">Real</button>
+                                <button class="machine" onclick="submitToForm('Machine Generated', '${review.id || review.parent_asin}', '${review.label}')">Machine Generated</button>
+                            </div>
 
-                      <!-- Step 3: Next Button (Appears after confidence selection) -->
-                      <div id="nextButtonSection" class="hidden">
-                          <button class="next" onclick="submitReview('${review.id || review.parent_asin}', '${review.label}')">Next</button>
-                      </div>
+
+
+                        </div>
                     </div>
                 </div>
             `;
 
+
+
             reviewContainer.innerHTML = reviewHTML;
         }
 
+        function startChallenge() {
+            const input = document.getElementById('userName');
+            if (!input.value.trim()) {
+                alert("Please enter your name to start the challenge.");
+                return;
+            }
+            userName = input.value.trim();
+            document.getElementById('welcomeContainer').classList.add('hidden');
+            document.getElementById('reviewContainer').classList.remove('hidden');
+            // document.getElementById('welcomeMessage').textContent = `Welcome, ${userName}! Let's get started.`;
+            loadMetaData();
+        }
 
-        // Step 3: Submit Review & Move to Next
-        function submitReview(reviewId, label) {
-            if (!selectedDecision) {
-                alert("Please select whether the review is Fake or Real.");
+        function submitToForm(decision, reviewId, label) {
+            const confidenceLevel = document.querySelector('input[name="confidenceLevel"]:checked');
+
+            if (!confidenceLevel) {
+                alert("Please select your confidence level before submitting.");
                 return;
             }
 
-            if (selectedDecision === label) {
+            const selectedConfidence = confidenceLevel.value;
+
+            if (decision === label) {
                 correctLabels++; // Increase the correct label count
             }
 
-            const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScWK8afSc13-Na7AIH0Rf50Vw8x3H7M0IdIGHPQv8l5yWcZeQ/formResponse";
+            const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdWrYS9K5H5dtHMXn8w5OA0Bjz_m60MjGCLjU3IOQxtPgoNTA/formResponse";
             const formData = new URLSearchParams();
-            formData.append("entry.896362160", reviewId);
-            formData.append("entry.1473192954", selectedDecision);
-            formData.append("entry.634150305", userName);
-            formData.append("entry.941090218", selectedConfidence);
+            formData.append("entry.141195573", reviewId);
+            formData.append("entry.1251691115", decision);
+            formData.append("entry.328901112", userName);
+            formData.append("entry.1466872859", selectedConfidence); // Replace with actual field ID
 
-            console.log("Submitting:", [...formData.entries()]);
+            console.log("Form data being sent:", [...formData.entries()]);
 
             fetch(formURL, {
                 method: "POST",
@@ -690,73 +481,56 @@
                 moveToNextReview();
             }).catch(error => {
                 console.error("Error submitting form:", error);
+                alert("Failed to submit response. Please try again.");
             });
         }
 
-        function moveToNextReview() {
-            currentReviewIndex++;
-            // Update progress bar
-            const progressBar = document.getElementById('progressBar');
-            if (progressBar) {
-                const progressValue = Math.min((currentReviewIndex / reviewData.length) * 100, 100);
-                progressBar.value = progressValue; // Update progress bar
-                console.log(`Progress updated: ${progressValue}%`);
-            }
-
-            if (currentReviewIndex < reviewData.length) {
-                renderReviews();
-            } else {
-                // submitCorrectLabelsForm();
-                document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}! `;
-                // document.getElementById('reviewContent').innerHTML = "You have completed the challenge!</h2>";
-                // document.getElementById('reviewContent').innerHTML = `
-                //     <h2>You have completed the challenge!</h2>
-                //     <p>You got ${correctLabels} correct labels.</p>
-                //     <button onclick="window.location.href='https://sites.google.com/view/gpt-radar'">View Leaderboard</button>
-                // `;
-                document.getElementById('reviewContent').innerHTML = `
-                    <h2>You have completed the challenge!</h2>
-                    <p>You got <strong>${correctLabels}</strong> out of <strong>${reviewData.length}</strong> correct!</p>
-
-                    <h3>We’d love to hear your feedback! (Optional) 😊</h3>
-                    <textarea id="feedbackText" placeholder="Enter your feedback here..." rows="4" cols="50" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;"></textarea>
-
-                    <br><br>
-                    <button onclick="submitFeedback()" style="padding: 10px 20px; font-size: 1.1rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Submit Feedback
-                    </button>
-                `;
-                
-            }
-        }
-
-        function submitFeedback() {
-            const feedback = document.getElementById("feedbackText").value.trim();
-
-            if (!feedback) {
-                alert("Feedback is optional. You can skip this step!");
-                return;
-            }
-
-            const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfxqoCygfQNE4wSyiZ0LapfYrSKHTY3L0BwDuuIpS6unwPTbA/formResponse"; // Replace with actual Google Form URL
+        function submitCorrectLabelsForm() {
+            const correctLabelsFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScIoplKIeL1DmeJ6IUIoPLmIiHxDW1U3XOxFel84S7vOcGO1w/formResponse";
             const formData = new URLSearchParams();
-            formData.append("entry.321797091", userName);
-            formData.append("entry.119719453", feedback); // Replace "entry.123456789" with the actual Google Forms entry ID
+            formData.append("entry.2065126496", userName); // User's name
+            formData.append("entry.1182695243", correctLabels); // Correct labels count
 
-            fetch(formURL, {
+            fetch(correctLabelsFormURL, {
                 method: "POST",
                 body: formData,
                 mode: "no-cors"
             }).then(() => {
-                alert("Thank you for your feedback! 😊");
-                document.getElementById("feedbackText").value = ""; // Clear the textarea after submission
+                console.log(`Submitted: User ${userName}, Correct Labels: ${correctLabels}`);
             }).catch(error => {
-                console.error("Error submitting feedback:", error);
-                alert("There was an issue submitting your feedback. Please try again.");
+                console.error("Error submitting correct labels:", error);
             });
         }
 
+        function moveToNextReview() {
+            currentReviewIndex++;  // Increment to move to the next review
+            console.log("Current review index:", currentReviewIndex); // Debugging log
 
+            // Update the remaining reviews count dynamically
+            // document.getElementById('reviewDataLength').textContent = `You will be reviewing ${reviewData.length - currentReviewIndex} reviews.`;
+
+            // Update the progress bar
+            const progressBar = document.getElementById('progressBar');
+            const progressValue = (currentReviewIndex / (reviewData.length-1)) * 100;
+            console.log("progress bar value: ", progressValue)
+            progressBar.value = progressValue;  // Update progress bar value
+            console.log(`Progress updated: ${progressValue}%`);
+
+            // Check if there are more reviews to show
+            if (currentReviewIndex < reviewData.length) {
+                renderReviews(); // Render the next review
+            } else {
+                submitCorrectLabelsForm();
+                document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}! `;
+                // document.getElementById('reviewContent').innerHTML = "You have completed the challenge!</h2>";
+                document.getElementById('reviewContent').innerHTML = `
+                    <h2>You have completed the challenge!</h2>
+                    <p>You got ${correctLabels} correct labels.</p>
+                    <button onclick="window.location.href='https://sites.google.com/view/gpt-radar'">View Leaderboard</button>
+                `;
+                
+            }
+        }
 
     </script>
 </body>
