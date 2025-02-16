@@ -223,6 +223,25 @@
           display: none;
       }
 
+      .vas-labels {
+            position: absolute;
+            width: 100%;
+            top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #555;
+            padding: 0 5px;
+        }
+
+        .left-label {
+            left: 0%;
+        }
+
+        .right-label {
+            right: 0%;
+        }
+
       /* Style the progress bar */
       progress {
           width: 100%; /* Full width */
@@ -525,7 +544,7 @@
 
             // GitHub Raw URLs (Update with your actual GitHub username and repo)
             const metaDataURL = "https://raw.githubusercontent.com/weiyaomeng/tempweb/main/data/data_metadata_more.csv";
-            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/tempweb/main/data-prolific/review_test_100.csv";
+            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/tempweb/main/data-prolific/review_test_3_1.csv";
             try {
                 // Load both metadata and review data using Promise.all
                 const [metaResponse, reviewResponse] = await Promise.all([
@@ -750,15 +769,40 @@
         };
 
         // Step 2: Update Confidence Level
-        function updateConfidenceLabel(value) {
-            selectedConfidence = confidenceLabels[value];
-            document.getElementById("confidenceLabel").textContent = selectedConfidence;
-            document.getElementById("nextButtonSection").classList.remove("hidden"); // Show Next button
+        // function updateConfidenceLabel(value) {
+        //     selectedConfidence = confidenceLabels[value];
+        //     document.getElementById("confidenceLabel").textContent = selectedConfidence;
+        //     document.getElementById("nextButtonSection").classList.remove("hidden"); // Show Next button
+        // }
+        function updateConfidenceValue(value) {
+            let confidenceValue = Math.round(value); // Ensure it's a rounded number between 0-100
+            selectedConfidence = confidenceValue; 
+
+            // Show the Next button only if a value has been selected
+            document.getElementById("nextButtonSection").classList.remove("hidden");
         }
+
 
         function getSelectedConfidence() {
             const confidenceRadios = document.querySelectorAll('input[name="confidenceLevel"]:checked');
             return confidenceRadios.length > 0 ? confidenceRadios[0].value : "No Confidence Selected";
+        }
+
+        let confidenceValue = 50; // Default confidence value
+
+        function updateVASFill() {
+            let slider = document.getElementById("confidenceVAS");
+            let percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.background = `linear-gradient(to right, #007bff ${percentage}%, #ddd ${percentage}%)`;
+        }
+
+        function captureConfidenceValue() {
+            let slider = document.getElementById("confidenceVAS");
+            selectedConfidence = slider.value; // Store the latest selected value
+            console.log("Updated Confidence Value:", selectedConfidence); // Debugging
+
+            // Show the Next button only if a selection has been made
+            document.getElementById("nextButtonSection").classList.remove("hidden");
         }
 
         // Step 1: Select Fake or Real
@@ -828,7 +872,7 @@
                       <p id="userSelection" class="hidden" margin-top: 10px;"></p>
 
                       <!-- Step 2: Confidence Level (Appears after selection) -->
-                      <div id="confidenceSection" class="hidden">
+                      <!-- <div id="confidenceSection" class="hidden">
                           <p><strong>Select your confidence level:</strong></p>
                           <div class="slider-container">
                               <input type="range" id="confidenceSlider" min="1" max="5" step="1" value="3" oninput="updateConfidenceLabel(this.value)">
@@ -845,7 +889,18 @@
                           </div>
                           <br><br>
                           <p><strong>Your selection:</strong> <span id="confidenceLabel">Moderately Confident</span></p>
-                      </div>
+                      </div>-->
+                      <div id="confidenceSection" class="hidden">
+                            <p><strong>Select your confidence level:</strong></p>
+                            <div class="slider-container">
+                                <input type="range" id="confidenceVAS" min="0" max="100" step="1" value="50" 
+                                    oninput="updateVASFill()" onchange="captureConfidenceValue()">
+                                <div class="vas-labels">
+                                    <span class="left-label">Not confident at all (0)</span>
+                                    <span class="right-label">Very confident (100)</span>
+                                </div>
+                            </div>
+                        </div>
 
                       <!-- Step 3: Next Button (Appears after confidence selection) -->
                       <div id="nextButtonSection" class="hidden">
@@ -865,9 +920,13 @@
                 alert("Please select whether the review is Fake or Real.");
                 return;
             }
+            // Capture the latest confidence value just before submission
+            let confidenceInput = document.getElementById("confidenceVAS");
+            selectedConfidence = confidenceInput.value;
 
             console.log("Selected Decision:", selectedDecision);
             console.log("Correct Label:", label);
+            console.log("Submitting Confidence:", selectedConfidence);
 
             if (selectedDecision.trim().toLowerCase() === label.trim().toLowerCase()) {
                 correctLabels++; // Increase the correct label count
@@ -878,6 +937,7 @@
             formData.append("entry.896362160", reviewId);
             formData.append("entry.1473192954", selectedDecision);
             formData.append("entry.634150305", userName);
+            // formData.append("entry.941090218", selectedConfidence);
             formData.append("entry.941090218", selectedConfidence);
 
             console.log("Submitting:", [...formData.entries()]);
