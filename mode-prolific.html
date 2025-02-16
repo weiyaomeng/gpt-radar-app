@@ -550,8 +550,8 @@
             console.log("Fetching data for user:", userName);
 
             // GitHub Raw URLs (Update with your actual GitHub username and repo)
-            const metaDataURL = "https://raw.githubusercontent.com/weiyaomeng/tempweb/main/data/data_metadata_more.csv";
-            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/tempweb/main/data-prolific/review_test_3_1.csv";
+            const metaDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/data_metadata.csv";
+            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/prolific/review_50.csv";
             try {
                 // Load both metadata and review data using Promise.all
                 const [metaResponse, reviewResponse] = await Promise.all([
@@ -877,7 +877,7 @@
                 <div class="review-content">
                     <div class="product-info">
                         <h3>${product.title}</h3>
-                        <p><strong>Price:</strong> £${product.price}</p>
+                        <p><strong>Price:</strong> $${product.price}</p>
                         <p><strong>Rating:</strong> ${product.average_rating} (${product.rating_number} reviews)</p>
                         <div class="product-image">
                             <img src="${productImageUrl}" alt="${product.title}">
