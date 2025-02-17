@@ -314,12 +314,6 @@
         cursor: not-allowed;
     }
 
-    #studyContainer {
-        display: none;
-    }
-
-
-
       /* ✅ Mobile Responsive Fix */
       @media (max-width: 768px) {
             .slider-scale {
@@ -360,15 +354,19 @@
     <div class="container" id="welcomeContainer">
         <h1>Fake or Fact: Who Has Got the GPT Radar?</h1>
         <h2 style="font-size: 1.5em; color: #007bff;margin-bottom: 20px;">Open for Prolific Participants</h2><br>
-        <p style="margin-bottom: 20px; font-size: 1.2em; color: #555;">Enter your Prolific ID to start the challenge:</p>
-        <p style="font-weight: bold; margin-bottom: 20px; color: #333;">Your ID is required for verification, so please enter it correctly.</p>
+        <p style="margin-bottom: 20px; font-size: 1.2em; color: #333;">Before starting the challenge, make sure your Prolific ID has been captured correctly, otherwise you don't be paid:</p>
+        <p id="prolificIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #007bff;"></p>
+
+        <p id="studyIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #28a745;"></p>
+        <p id="sessionIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #dc3545;"></p>
+
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 400px; margin: 0 auto;">
-            <input 
+            <!-- <input 
                 type="text" 
                 id="userName" 
                 placeholder="Your Prolific ID" 
                 style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" 
-            />
+            /> -->
             <button 
                 onclick="showInfoCollection()" 
                 style="width: 100%; padding: 12px; font-size: 1.1rem; cursor: pointer; border: none; border-radius: 5px; background-color: #007bff; color: white; transition: background-color 0.3s ease;">
@@ -459,13 +457,85 @@
         let productData = [];
         let reviewData = [];
         let currentReviewIndex = 0;
-        let userName = "";
+        let prolificID = "";
+        let studyID = "";
+        let sessionID = "";
+        // let userName = "";
         let correctLabels = 0;
         let llmFamiliarity = 3;
         let llmFamiliarityText = "Occasionally used";
         let llmUsage = "";
         let selectedDecision = "";
         let selectedConfidence = "Moderately Confident"; // Default confidence level
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            function displayIDs() {
+                // ✅ Fetch Prolific ID from URL or localStorage
+                prolificID = getQueryParam('PROLIFIC_PID') || localStorage.getItem("prolificID");
+                studyID = getQueryParam('STUDY_ID') || localStorage.getItem("studyID");
+                sessionID = getQueryParam('SESSION_ID') || localStorage.getItem("sessionID");
+
+                // ✅ Store in localStorage for persistence
+                if (prolificID) localStorage.setItem("prolificID", prolificID);
+                if (studyID) localStorage.setItem("studyID", studyID);
+                if (sessionID) localStorage.setItem("sessionID", sessionID);
+
+                console.log("✅ Prolific ID:", prolificID);
+                console.log("✅ Study ID:", studyID);
+                console.log("✅ Session ID:", sessionID);
+
+                // ✅ Update HTML Elements (Ensure Elements Exist Before Updating)
+                const prolificIdElement = document.getElementById("prolificIdDisplay");
+                const studyIdElement = document.getElementById("studyIdDisplay");
+                const sessionIdElement = document.getElementById("sessionIdDisplay");
+
+                if (prolificIdElement) {
+                    prolificIdElement.innerHTML = prolificID
+                        ? `✅ Prolific ID: <strong>${prolificID}</strong>`
+                        : `⚠️ Prolific ID not detected.`;
+                }
+
+                if (studyIdElement) {
+                    studyIdElement.innerHTML = studyID
+                        ? `📖 Study ID: <strong>${studyID}</strong>`
+                        : `⚠️ Study ID not detected.`;
+                }
+
+                if (sessionIdElement) {
+                    sessionIdElement.innerHTML = sessionID
+                        ? `🎯 Session ID: <strong>${sessionID}</strong>`
+                        : `⚠️ Session ID not detected.`;
+                }
+            }
+            // 🕐 Function to wait for modal elements before calling setupModals()
+            function waitForModalsAndRunSetup(retries = 10) {
+                const readMoreButton = document.getElementById("readMoreButton");
+                const agreeButton = document.getElementById("agreeButton");
+                const consentCheckboxes = document.querySelectorAll(".consent-checkbox");
+
+                if (readMoreButton || agreeButton || consentCheckboxes.length > 0) {
+                    console.log("✅ Modal elements detected, executing setupModals()");
+                    setupModals(); // Execute setupModals() once elements are detected
+                } else if (retries > 0) {
+                    console.warn(`⏳ Waiting for modal elements... Retries left: ${retries}`);
+                    setTimeout(() => waitForModalsAndRunSetup(retries - 1), 300); // Try again after 300ms
+                } else {
+                    console.error("❌ Modal elements not found after multiple retries. setupModals() not executed.");
+                }
+            }
+
+            // Run displayIDs() immediately
+            displayIDs();
+
+            // Try running setupModals(), retrying if needed
+            waitForModalsAndRunSetup();
+        });
 
         /*Information collection part */
         const familiarityLabels = {
@@ -490,20 +560,17 @@
         window.onload = updateSliderFill;
 
         function showInfoCollection() {
-            // dataLoad();
-            const input = document.getElementById('userName');
-            if (!input.value.trim()) {
-                alert("Please enter your Prolific ID to continue.");
-                return;
-            }
-            userName = input.value.trim();
-            document.getElementById('welcomeContainer').classList.add('hidden');
-            document.getElementById('infoCollectionContainer').classList.remove('hidden');
-            // dataLoad();
+            console.log("✅ Prolific ID captured as userName:", prolificID);
+
+            // Hide welcome container, show pre-task questionnaire
+            document.getElementById("welcomeContainer").classList.add("hidden");
+            document.getElementById("infoCollectionContainer").classList.remove("hidden");
         }
 
-        function submitInfoToGoogleForm(userName0, llmFamiliarityText0, llmUsage0) {
-            if (!userName0 || !llmFamiliarityText0 || !llmUsage0) {
+
+        // function submitInfoToGoogleForm(userName0, llmFamiliarityText0, llmUsage0) {
+        function submitInfoToGoogleForm(llmFamiliarityText0, llmUsage0) {
+            if (!prolificID || !llmFamiliarityText0 || !llmUsage0) {
                 alert("Please complete all fields before proceeding.");
                 return;
             }
@@ -511,7 +578,10 @@
             const googleFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSe9ki7B6M3fpShtphj1Qi5kKW6OPWV7PAqqrUBwde8JqX5lxQ/formResponse";
             // Replace with actual entry IDs from your form
             const formData = new URLSearchParams();
-            formData.append("entry.1044300960", userName0);        // Participant ID
+            // formData.append("entry.1044300960", userName0);        // Participant ID
+            formData.append("entry.1044300960", prolificID);
+            formData.append("entry.697878432", studyID);
+            formData.append("entry.940612482", sessionID);
             formData.append("entry.2068983905", llmFamiliarityText0); // Familiarity Level
             formData.append("entry.144535932", llmUsage0);        // Usage Purpose
 
@@ -538,10 +608,12 @@
             }
 
             llmFamiliarityText = document.getElementById("familiarityValue").textContent;
-            submitInfoToGoogleForm(userName, llmFamiliarityText, llmUsage);
+            // submitInfoToGoogleForm(userName, llmFamiliarityText, llmUsage);
+            submitInfoToGoogleForm(llmFamiliarityText, llmUsage);
 
             // Hide info collection container, show review task
-            document.getElementById('welcomeMessage').textContent = `Welcome, ${userName}`;
+            // document.getElementById('welcomeMessage').textContent = `Welcome, ${userName}`;
+            document.getElementById('welcomeMessage').textContent = `Welcome, ${prolificID}`;
             document.getElementById('infoCollectionContainer').classList.add('hidden');
             document.getElementById('instructionsContainer').classList.remove('hidden');     
             dataLoad();       
@@ -549,12 +621,13 @@
 
         /* Instruction view*/
         async function dataLoad() {
-            console.log("Fetching data for user:", userName);
+            // console.log("Fetching data for user:", userName);
+            console.log("Fetching data for user:", prolificID);
 
             // GitHub Raw URLs (Update with your actual GitHub username and repo)
             const metaDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/data_metadata.csv";
-            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_50.csv";
-            // const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_3.csv";
+            // const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_50.csv";
+            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_3.csv";
             try {
                 // Load both metadata and review data using Promise.all
                 const [metaResponse, reviewResponse] = await Promise.all([
@@ -960,12 +1033,14 @@
             if (selectedDecision.trim().toLowerCase() === label.trim().toLowerCase()) {
                 correctLabels++; // Increase the correct label count
             }
-
             const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScWK8afSc13-Na7AIH0Rf50Vw8x3H7M0IdIGHPQv8l5yWcZeQ/formResponse";
             const formData = new URLSearchParams();
             formData.append("entry.896362160", reviewId);
             formData.append("entry.1473192954", selectedDecision);
-            formData.append("entry.634150305", userName);
+            formData.append("entry.634150305", prolificID);
+            formData.append("entry.182940948", studyID);
+            formData.append("entry.1804557031", sessionID);
+            // formData.append("entry.634150305", userName);
             // formData.append("entry.941090218", selectedConfidence);
             formData.append("entry.941090218", selectedConfidence);
 
@@ -997,7 +1072,8 @@
             } else {
                 submitCorrectLabelsForm();
                 // submitCorrectLabelsForm();
-                document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}. `;
+                // document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}. `;
+                document.getElementById('welcomeMessage').textContent = `Thank you, ${prolificID}. `;
                 // document.getElementById('reviewContent').innerHTML = "You have completed the challenge!</h2>";
                 // document.getElementById('reviewContent').innerHTML = `
                 //     <h2>You have completed the challenge!</h2>
@@ -1051,7 +1127,9 @@
 
             const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfxqoCygfQNE4wSyiZ0LapfYrSKHTY3L0BwDuuIpS6unwPTbA/formResponse"; // Replace with actual Google Form URL
             const formData = new URLSearchParams();
-            formData.append("entry.321797091", userName);
+            formData.append("entry.321797091", prolificID);
+            formData.append("entry.1185916819", sessionID);
+            formData.append("entry.1308092216", studyID);
             formData.append("entry.119719453", feedback); // Replace "entry.123456789" with the actual Google Forms entry ID
 
             fetch(formURL, {
@@ -1067,10 +1145,14 @@
             });
         }
 
+
         function submitCorrectLabelsForm() {
             const correctLabelsFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScWoFV3rUXDePPI27sU0iBbUJV5EoBLnjLEOHUaA7a53MJOhg/formResponse";
             const formData = new URLSearchParams();
-            formData.append("entry.1355449189", userName); // User's name
+            // formData.append("entry.1355449189", userName); // User's name
+            formData.append("entry.1355449189", prolificID);
+            formData.append("entry.1046397378", sessionID);
+            formData.append("entry.748023530", studyID);
             formData.append("entry.1711388712", correctLabels); // Correct labels count
 
             fetch(correctLabelsFormURL, {
@@ -1078,7 +1160,8 @@
                 body: formData,
                 mode: "no-cors"
             }).then(() => {
-                console.log(`Submitted: User ${userName}, Correct Labels: ${correctLabels}`);
+                console.log(`Submitted: User ${prolificID}, Correct Labels: ${correctLabels}`);
+                // console.log(`Submitted: User ${userName}, Correct Labels: ${correctLabels}`);
             }).catch(error => {
                 console.error("Error submitting correct labels:", error);
             });
@@ -1102,39 +1185,103 @@
         }
 
         // Function to handle modal behavior
-        function setupModals() {
-            document.getElementById("readMoreButton").addEventListener("click", function () {
-                document.getElementById("initialMessage").style.display = "none"; // Hide first sentence
-                document.getElementById("fullInfo").style.display = "block"; // Show full information
-                this.style.display = "none"; // Hide "Read More" button
-            });
+        // function setupModals() {
+        //     document.getElementById("readMoreButton").addEventListener("click", function () {
+        //         document.getElementById("initialMessage").style.display = "none"; // Hide first sentence
+        //         document.getElementById("fullInfo").style.display = "block"; // Show full information
+        //         this.style.display = "none"; // Hide "Read More" button
+        //     });
 
-            document.getElementById("agreeButton").addEventListener("click", function () {
-                document.getElementById("participantModal").style.display = "none";
-                document.getElementById("consentFormModal").style.display = "flex";
-            });
+        //     document.getElementById("agreeButton").addEventListener("click", function () {
+        //         document.getElementById("participantModal").style.display = "none";
+        //         document.getElementById("consentFormModal").style.display = "flex";
+        //     });
 
-            document.querySelectorAll(".consent-checkbox").forEach(checkbox => {
-                checkbox.addEventListener("change", function () {
-                    const allChecked = [...document.querySelectorAll(".consent-checkbox")].every(cb => cb.checked);
-                    document.getElementById("finalConsentButton").disabled = !allChecked;
-                });
-            });
+        //     document.querySelectorAll(".consent-checkbox").forEach(checkbox => {
+        //         checkbox.addEventListener("change", function () {
+        //             const allChecked = [...document.querySelectorAll(".consent-checkbox")].every(cb => cb.checked);
+        //             document.getElementById("finalConsentButton").disabled = !allChecked;
+        //         });
+        //     });
 
-            document.getElementById("finalConsentButton").addEventListener("click", function () {
-                document.getElementById("consentFormModal").style.display = "none";
-                alert("Thank you! You will now start the study.");
-                // document.getElementById("studyContainer").style.display = "block"; // Show study content
-                let studyContainer = document.getElementById("studyContainer");
+        //     document.getElementById("finalConsentButton").addEventListener("click", function () {
+        //         document.getElementById("consentFormModal").style.display = "none";
+                
+        //         // document.getElementById("studyContainer").style.display = "block"; // Show study content
+        //         let studyContainer = document.getElementById("studyContainer");
     
-                if (studyContainer) {
-                    studyContainer.style.display = "block"; // ✅ Only modify if it exists
-                } else {
-                    console.warn("⚠️ 'studyContainer' not found. Ensure it exists in the DOM.");
-                }
-                // Redirect or show next section
+        //         if (studyContainer) {
+        //             studyContainer.style.display = "block"; // ✅ Only modify if it exists
+        //         } else {
+        //             console.log("⚠️ 'studyContainer' not found. Ensure it exists in the DOM.");
+        //         }
+        //         alert("Thank you! You will now start the study.");
+        //         // if (studyContainer) {
+        //         //     studyContainer.style.display = "block"; // Show study content
+        //         // } else {
+        //         //     console.warn("⚠️ 'studyContainer' not found. Ensure it exists in the DOM.");
+        //         // }
+        //         // Redirect or show next section
+        //     });
+        // }
+        function setupModals() {
+            const readMoreButton = document.getElementById("readMoreButton");
+            const agreeButton = document.getElementById("agreeButton");
+            const finalConsentButton = document.getElementById("finalConsentButton");
+
+            // Ensure the elements exist before adding event listeners
+            if (readMoreButton) {
+                readMoreButton.removeEventListener("click", handleReadMore);
+                readMoreButton.addEventListener("click", handleReadMore);
+            }
+
+            if (agreeButton) {
+                agreeButton.removeEventListener("click", handleAgree);
+                agreeButton.addEventListener("click", handleAgree);
+            }
+
+            if (finalConsentButton) {
+                finalConsentButton.removeEventListener("click", handleFinalConsent);
+                finalConsentButton.addEventListener("click", handleFinalConsent);
+            }
+
+            // Ensure consent checkboxes only get one event listener
+            document.querySelectorAll(".consent-checkbox").forEach(checkbox => {
+                checkbox.removeEventListener("change", handleConsentChange);
+                checkbox.addEventListener("change", handleConsentChange);
             });
         }
+
+        // Separate event handler functions to prevent multiple alerts
+        function handleReadMore() {
+            document.getElementById("initialMessage").style.display = "none";
+            document.getElementById("fullInfo").style.display = "block";
+            this.style.display = "none"; 
+        }
+
+        function handleAgree() {
+            document.getElementById("participantModal").style.display = "none";
+            document.getElementById("consentFormModal").style.display = "flex";
+        }
+
+        function handleFinalConsent() {
+            document.getElementById("consentFormModal").style.display = "none";
+
+            let studyContainer = document.getElementById("studyContainer");
+            if (studyContainer) {
+                studyContainer.style.display = "block";
+            } else {
+                console.log("⚠️ 'studyContainer' not found. Ensure it exists in the DOM.");
+            }
+
+            alert("Thank you! You will now start the study.");
+        }
+
+        function handleConsentChange() {
+            const allChecked = [...document.querySelectorAll(".consent-checkbox")].every(cb => cb.checked);
+            document.getElementById("finalConsentButton").disabled = !allChecked;
+        }
+
 
         // Load the modal on page load
         // window.addEventListener("DOMContentLoaded", loadParticipantInfo);
