@@ -783,12 +783,12 @@
 
             reviewContainer.innerHTML = ''; // Clear existing content
             const review = reviewData[currentReviewIndex];
-            let imagePath = review.imageURL || "dataimg-based/images/placeholder.jpg"; // ✅ Fallback image
+            let imagePath = review.imageURL || "data/img-based/images/placeholder.jpg"; // ✅ Fallback image
 
             const reviewHTML = `
                 <div class="review-content">
                     <div class="review-left">
-                        <img src="/dataimg-based/images/${review.ID}.jpg" onerror="this.onerror=null; this.src='/dataimg-based/images/placeholder.jpg';" class="review-image" alt="Review Image">
+                        <img src="data/img-based/images/${review.ID}.jpg" onerror="this.onerror=null; this.src='data/img-based/images/placeholder.jpg';" class="review-image" alt="Review Image">
                         <p class="review-text">${review.text}</p>
                     </div>
 
