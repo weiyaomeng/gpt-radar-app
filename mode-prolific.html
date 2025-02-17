@@ -467,6 +467,7 @@
         let llmUsage = "";
         let selectedDecision = "";
         let selectedConfidence = "Moderately Confident"; // Default confidence level
+        let startTime = null;
 
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -584,6 +585,7 @@
             formData.append("entry.940612482", sessionID);
             formData.append("entry.2068983905", llmFamiliarityText0); // Familiarity Level
             formData.append("entry.144535932", llmUsage0);        // Usage Purpose
+            formData.append("entry.2097595769", startTime);  
 
             // Send the data to Google Form
             fetch(googleFormURL, {
@@ -609,7 +611,7 @@
 
             llmFamiliarityText = document.getElementById("familiarityValue").textContent;
             // submitInfoToGoogleForm(userName, llmFamiliarityText, llmUsage);
-            submitInfoToGoogleForm(llmFamiliarityText, llmUsage);
+            // submitInfoToGoogleForm(llmFamiliarityText, llmUsage);
 
             // Hide info collection container, show review task
             // document.getElementById('welcomeMessage').textContent = `Welcome, ${userName}`;
@@ -669,6 +671,9 @@
         }
 
         function startReviewTask() {
+            startTime = new Date().toISOString();
+            console.log("Review task started at:", startTime);
+            submitInfoToGoogleForm(llmFamiliarityText, llmUsage);
             // Hide instructions, show review section
             document.getElementById('instructionsContainer').classList.add('hidden');
             document.getElementById('reviewContainer').classList.remove('hidden');
@@ -1058,6 +1063,10 @@
         }
 
         function moveToNextReview() {
+            const nextButton = document.querySelector('.next');
+            if (!nextButton) return;
+            nextButton.disabled = true;
+
             currentReviewIndex++;
             // Update progress bar
             const progressBar = document.getElementById('progressBar');
@@ -1068,18 +1077,14 @@
             }
 
             if (currentReviewIndex < reviewData.length) {
-                renderReviews();
+                // renderReviews();
+                setTimeout(() => {
+                    renderReviews(); // Render the next review
+                    nextButton.disabled = false; // ✅ Re-enable button AFTER review loads
+                }, 500); // Small delay ensures smooth transition
             } else {
                 submitCorrectLabelsForm();
-                // submitCorrectLabelsForm();
-                // document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}. `;
                 document.getElementById('welcomeMessage').textContent = `Thank you, ${prolificID}. `;
-                // document.getElementById('reviewContent').innerHTML = "You have completed the challenge!</h2>";
-                // document.getElementById('reviewContent').innerHTML = `
-                //     <h2>You have completed the challenge!</h2>
-                //     <p>You got ${correctLabels} correct labels.</p>
-                //     <button onclick="window.location.href='https://sites.google.com/view/gpt-radar'">View Leaderboard</button>
-                // `;
                 document.getElementById('reviewContent').innerHTML = `
                     <h2>You have completed the challenge!</h2>
                     <p>You got <strong>${correctLabels}</strong> out of <strong>${reviewData.length}</strong> correct!</p>
