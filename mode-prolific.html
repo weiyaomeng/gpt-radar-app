@@ -353,26 +353,26 @@
     <!-- Welcome Container -->
     <div class="container" id="welcomeContainer">
         <h1>Fake or Fact: Who Has Got the GPT Radar?</h1>
-        <h2 style="font-size: 1.5em; color: #007bff;margin-bottom: 20px;">Open for Prolific Participants</h2><br>
-        <p style="margin-bottom: 20px; font-size: 1.2em; color: #333;">Before starting the challenge, make sure your Prolific ID has been captured correctly, otherwise you don't be paid:</p>
-        <p id="prolificIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #007bff;"></p>
+        <h2 style="font-size: 1.5em; color: #007bff;margin-bottom: 20px;">Exclusive for Prolific Participants</h2><br>
+        <p style="margin-bottom: 20px; font-size: 1.2em; color: #333;">Before starting the challenge, please ensure your Prolific ID is captured correctly:</p>
+        <p id="prolificIdDisplay" style="font-size: 1.4em; font-weight: bold; color: #007bff;"></p>
+        <p style="margin-bottom: 20px; font-size: 1.2em; color: #333;">If everything looks correct, click the <strong>Enter</strong> button below to proceed.</p>
 
-        <p id="studyIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #28a745;"></p>
-        <p id="sessionIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #dc3545;"></p>
+        <!-- <p id="studyIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #28a745;"></p>
+        <p id="sessionIdDisplay" style="font-size: 1.2em; font-weight: bold; color: #dc3545;"></p> -->
 
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 400px; margin: 0 auto;">
-            <!-- <input 
-                type="text" 
-                id="userName" 
-                placeholder="Your Prolific ID" 
-                style="width: 100%; padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" 
-            /> -->
             <button 
                 onclick="showInfoCollection()" 
                 style="width: 100%; padding: 12px; font-size: 1.1rem; cursor: pointer; border: none; border-radius: 5px; background-color: #007bff; color: white; transition: background-color 0.3s ease;">
                 Enter
             </button>
         </div>
+        <!-- <p style="margin-bottom: 20px; font-size: 1.2em; color: #333;">If your ID is missing or incorrect, please return to Prolific and re-enter the study, or contact the researcher for assistance. </p><br> -->
+        <br>
+        <p style="margin-top: 20px; font-size: 1.1em; color: #555;">
+            <strong>Note:</strong> If your Prolific ID is missing or incorrect, please return to Prolific and re-enter the study. If the issue persists, contact the researcher for assistance.
+        </p>
     </div>
 
     <!-- Info Collection Container -->
@@ -498,19 +498,19 @@
 
                 if (prolificIdElement) {
                     prolificIdElement.innerHTML = prolificID
-                        ? `✅ Prolific ID: <strong>${prolificID}</strong>`
+                        ? `<strong>${prolificID}</strong>`
                         : `⚠️ Prolific ID not detected.`;
                 }
 
                 if (studyIdElement) {
                     studyIdElement.innerHTML = studyID
-                        ? `📖 Study ID: <strong>${studyID}</strong>`
+                        ? `Study ID: <strong>${studyID}</strong>`
                         : `⚠️ Study ID not detected.`;
                 }
 
                 if (sessionIdElement) {
                     sessionIdElement.innerHTML = sessionID
-                        ? `🎯 Session ID: <strong>${sessionID}</strong>`
+                        ? `Session ID: <strong>${sessionID}</strong>`
                         : `⚠️ Session ID not detected.`;
                 }
             }
@@ -1027,6 +1027,11 @@
                 alert("Please select whether the review is Fake or Real.");
                 return;
             }
+
+            let nextButton = document.querySelector(".next");
+            nextButton.disabled = true;  // Disable button to prevent multiple clicks
+            nextButton.style.opacity = "0.5"; // Give visual feedback
+
             // Capture the latest confidence value just before submission
             let confidenceInput = document.getElementById("confidenceVAS");
             selectedConfidence = confidenceInput.value;
@@ -1056,9 +1061,16 @@
                 body: formData,
                 mode: "no-cors"
             }).then(() => {
-                moveToNextReview();
+                // moveToNextReview();
+                setTimeout(() => { 
+                    moveToNextReview();
+                    nextButton.disabled = false;  // Re-enable button after moving to the next review
+                    nextButton.style.opacity = "1"; 
+                }, 500); // Ensure the function doesn't trigger too fast
             }).catch(error => {
                 console.error("Error submitting form:", error);
+                nextButton.disabled = false; // Re-enable button if error occurs
+                nextButton.style.opacity = "1"; 
             });
         }
 
@@ -1084,18 +1096,23 @@
                 }, 500); // Small delay ensures smooth transition
             } else {
                 submitCorrectLabelsForm();
-                document.getElementById('welcomeMessage').textContent = `Thank you, ${prolificID}. `;
+                // document.getElementById('welcomeMessage').textContent = `Thank you, ${prolificID}. `;
+                document.getElementById('welcomeMessage').textContent = `Challenge Completed!`;
                 document.getElementById('reviewContent').innerHTML = `
-                    <h2>You have completed the challenge!</h2>
                     <p>You got <strong>${correctLabels}</strong> out of <strong>${reviewData.length}</strong> correct!</p>
 
-                    <p>Please click the Completion button below to log your completion. It will redirect you to Prolific.</p>
+                    <p style="font-size: 1.2em; color: #d9534f; font-weight: bold;">
+                        Important: Please click the button below to confirm your completion and return to Prolific.
+                    </p>
+
                     <button onclick="redirectToProlific()" 
                         style="padding: 12px 25px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Complete & Return to Prolific
                     </button>
 
-                    <h3>We’d love to hear your feedback! (Optional) 😊</h3>
+                    <hr style="margin: 25px 0;">
+
+                    <h4>We’d love to hear your feedback! (Optional) 😊</h4>
                     <textarea id="feedbackText" placeholder="Enter your feedback here..." rows="4" cols="50" style="width: 60%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;"></textarea>
 
                     <br><br>
