@@ -994,6 +994,7 @@
             if (currentReviewIndex < reviewData.length) {
                 renderReviews();
             } else {
+                submitCorrectLabelsForm();
                 // submitCorrectLabelsForm();
                 document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}. `;
                 // document.getElementById('reviewContent').innerHTML = "You have completed the challenge!</h2>";
@@ -1041,6 +1042,23 @@
             }).catch(error => {
                 console.error("Error submitting feedback:", error);
                 alert("There was an issue submitting your feedback. Please try again.");
+            });
+        }
+
+        function submitCorrectLabelsForm() {
+            const correctLabelsFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScWoFV3rUXDePPI27sU0iBbUJV5EoBLnjLEOHUaA7a53MJOhg/formResponse";
+            const formData = new URLSearchParams();
+            formData.append("entry.1355449189", userName); // User's name
+            formData.append("entry.1711388712", correctLabels); // Correct labels count
+
+            fetch(correctLabelsFormURL, {
+                method: "POST",
+                body: formData,
+                mode: "no-cors"
+            }).then(() => {
+                console.log(`Submitted: User ${userName}, Correct Labels: ${correctLabels}`);
+            }).catch(error => {
+                console.error("Error submitting correct labels:", error);
             });
         }
 
