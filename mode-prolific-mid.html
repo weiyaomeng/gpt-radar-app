@@ -427,14 +427,14 @@
             </p>
         
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                You will be presented with one review at a time. On the left side of the screen, you'll find the product information, while the review appears on the right. Your task is to determine whether the review is human-written (Real) or AI-generated (Fake). Use your best judgment and indicate your confidence level for each decision.
+                You will be presented with one review at a time. On the left side of the screen, you will find the product information, while the review appears on the right. Your task is to determine whether the review is human-written (Real) or AI-generated (Fake). Use your best judgment and indicate your confidence level for each decision.
             </p>
         
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
                 <strong>Important:</strong> <br>
                 Refreshing or leaving the page will reset your progress, requiring you to start over. Please avoid navigating away during the challenge.
                 <br><br>
-                <strong>To receive your reward, you must complete all the reviews. Once you finish the challenge, a completion message will be displayed.</strong>
+                <strong>To receive your reward, you must complete all the reviews. Once you finish the challenge, please click the Completion button to log your completion.</strong>
             </p>
         
         </section>        
@@ -1010,15 +1010,15 @@
 
                     <p>Please click the Completion button below to log your completion. It will redirect you to Prolific.</p>
                     <button onclick="redirectToProlific()" 
-                        style="padding: 12px 25px; font-size: 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        style="padding: 12px 25px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Complete & Return to Prolific
                     </button>
 
                     <h3>We’d love to hear your feedback! (Optional) 😊</h3>
-                    <textarea id="feedbackText" placeholder="Enter your feedback here..." rows="4" cols="50" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+                    <textarea id="feedbackText" placeholder="Enter your feedback here..." rows="4" cols="50" style="width: 60%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;"></textarea>
 
                     <br><br>
-                    <button onclick="submitFeedback()" style="padding: 10px 20px; font-size: 1.1rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    <button onclick="submitFeedback()" style="padding: 10px 20px; font-size: 1.1rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Submit Feedback
                     </button>
                 `;
@@ -1028,17 +1028,17 @@
 
         function redirectToProlific() {
             const prolificBaseURL = "https://app.prolific.com/submissions/complete?cc=CSA17VYX";
+            window.location.href = prolificBaseURL;
 
             // Get Prolific ID from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const prolificID = urlParams.get('PROLIFIC_PID');
-
+            // const urlParams = new URLSearchParams(window.location.search);
+            // const prolificID = urlParams.get('PROLIFIC_PID');
             // Redirect with Prolific ID if available
-            if (prolificID) {
-                window.location.href = `${prolificBaseURL}&PROLIFIC_PID=${prolificID}`;
-            } else {
-                window.location.href = prolificBaseURL;
-            }
+            // if (prolificID) {
+            //     window.location.href = `${prolificBaseURL}&PROLIFIC_PID=${prolificID}`;
+            // } else {
+            //     window.location.href = prolificBaseURL;
+            // }
         }
 
         function submitFeedback() {
