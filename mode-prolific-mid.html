@@ -553,7 +553,8 @@
 
             // GitHub Raw URLs (Update with your actual GitHub username and repo)
             const metaDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/data_metadata.csv";
-            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_50.csv";
+            // const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_50.csv";
+            const reviewDataURL = "https://raw.githubusercontent.com/weiyaomeng/gpt-radar-app/main/data/prolific/review_3.csv";
             try {
                 // Load both metadata and review data using Promise.all
                 const [metaResponse, reviewResponse] = await Promise.all([
@@ -1007,6 +1008,12 @@
                     <h2>You have completed the challenge!</h2>
                     <p>You got <strong>${correctLabels}</strong> out of <strong>${reviewData.length}</strong> correct!</p>
 
+                    <p>Please click the Completion button below to log your completion. It will redirect you to Prolific.</p>
+                    <button onclick="redirectToProlific()" 
+                        style="padding: 12px 25px; font-size: 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Complete & Return to Prolific
+                    </button>
+
                     <h3>We’d love to hear your feedback! (Optional) 😊</h3>
                     <textarea id="feedbackText" placeholder="Enter your feedback here..." rows="4" cols="50" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;"></textarea>
 
@@ -1016,6 +1023,21 @@
                     </button>
                 `;
                 
+            }
+        }
+
+        function redirectToProlific() {
+            const prolificBaseURL = "https://app.prolific.com/submissions/complete?cc=CSA17VYX";
+
+            // Get Prolific ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const prolificID = urlParams.get('PROLIFIC_PID');
+
+            // Redirect with Prolific ID if available
+            if (prolificID) {
+                window.location.href = `${prolificBaseURL}&PROLIFIC_PID=${prolificID}`;
+            } else {
+                window.location.href = prolificBaseURL;
             }
         }
 
