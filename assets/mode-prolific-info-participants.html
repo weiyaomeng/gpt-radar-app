@@ -36,19 +36,39 @@
             <p><strong>Researcher:</strong> Weiyao Meng (Weiyao.meng2@nottingham.ac.uk, 0115 951 5151) Business School, Jubilee Campus, Nottingham, NG8 1BB</p>
             <p>John Harvey (John.harvey2@nottingham.ac.uk, 0115 951 5151) Business School, Jubilee Campus, Nottingham, NG8 1BB</p>
 
-            <!-- <h3>Complaint procedure</h3>
-            <p>If you wish to complain about the way in which the research is being conducted or have any concerns about the research then in the first instance please contact Dr John Harvey.</p>
-            <p>Or contact the School's Research Ethics Officer: Samuel Dallyn (samuel.dallyn@nottingham.ac.uk) Business School, Jubilee Campus, Nottingham, NG8 1BB</p> -->
-
-            <!-- Checkbox for agreement -->
-            <!-- <label>
-                <input type="checkbox" id="consentCheckbox"> I have read and agree to participate.
-            </label> -->
-
             <button id="agreeButton">Continue</button>     
         </div>
     </div>
 </div>
+
+<!-- New: Research Participant Privacy Notice Modal -->
+<div id="privacyNoticeModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h2>Research participant privacy notice</h2>
+      <h3>Privacy information for Research Participants</h3>
+      <p>
+        For information about the University’s obligations with respect to your data, who you can get in touch with and your rights as a data subject, please visit: 
+        <a href="https://www.nottingham.ac.uk/utilities/privacy.aspx" target="_blank">https://www.nottingham.ac.uk/utilities/privacy.aspx</a>.
+      </p>
+      <h3>Why we collect your personal data</h3>
+      <p>
+        We collect personal data under the terms of the University’s Royal Charter in our capacity as a teaching and research body to advance education and learning. Specific purposes for data collection on this occasion are to evaluate humans' ability to distinguish between AI-generated and human-written content and to understand the confidence behind their decisions.
+      </p>
+      <h3>Legal basis for processing your personal data under GDPR</h3>
+      <p>
+        The legal basis for processing your personal data on this occasion is Article 6(1a) consent of the data subject. 
+      </p>
+      <h3>How long we keep your data</h3>
+      <p>
+        The University may store your data for up to 25 years and for a period of no less than 7 years after the research project finishes. The researchers who gathered or processed the data may also store the data indefinitely and reuse it in future research. Measures to safeguard your stored data include MFA enabled and password protected.
+      </p>
+      <h3>Who we share your data with</h3>
+      <p>
+        Extracts of your data may be disclosed in published works that are posted online for use by the scientific community. Your data may also be stored indefinitely on external data repositories (e.g., the UK Data Archive) and be further processed for archiving purposes in the public interest, or for historical, scientific or statistical purposes. It may also move with the researcher who collected your data to another institution in the future.
+      </p>
+      <button id="privacyContinueButton">Continue</button>
+    </div>
+  </div>
 
 <!-- Part 3: Participant Consent Form (Initially Hidden) -->
 <div id="consentFormModal" class="modal" style="display: none;">
@@ -85,7 +105,13 @@
     // Show Consent Form when "Continue" is clicked
     document.getElementById("agreeButton").addEventListener("click", function () {
         document.getElementById("participantModal").style.display = "none";
-        document.getElementById("consentFormModal").style.display = "flex";
+        document.getElementById("privacyNoticeModal").style.display = "flex";   // Show Privacy Notice Modal (using flex for centering)
+    });
+
+    // Transition: From Privacy Notice Modal to Consent Form Modal
+    document.getElementById("privacyContinueButton").addEventListener("click", function () {
+        document.getElementById("privacyNoticeModal").style.display = "none";   // Hide Privacy Notice Modal
+        document.getElementById("consentFormModal").style.display = "flex";       // Show Consent Form Modal
     });
 
     // Enable "I agree to take part" button only when all checkboxes are checked

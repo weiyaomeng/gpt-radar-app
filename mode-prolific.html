@@ -1261,6 +1261,7 @@
             const readMoreButton = document.getElementById("readMoreButton");
             const agreeButton = document.getElementById("agreeButton");
             const finalConsentButton = document.getElementById("finalConsentButton");
+            const privacyContinueButton = document.getElementById("privacyContinueButton");
 
             // Ensure the elements exist before adding event listeners
             if (readMoreButton) {
@@ -1271,6 +1272,13 @@
             if (agreeButton) {
                 agreeButton.removeEventListener("click", handleAgree);
                 agreeButton.addEventListener("click", handleAgree);
+            }
+
+            if (privacyContinueButton) {
+                privacyContinueButton.addEventListener("click", function() {
+                    document.getElementById("privacyNoticeModal").style.display = "none";
+                    document.getElementById("consentFormModal").style.display = "flex";
+                });
             }
 
             if (finalConsentButton) {
@@ -1294,7 +1302,8 @@
 
         function handleAgree() {
             document.getElementById("participantModal").style.display = "none";
-            document.getElementById("consentFormModal").style.display = "flex";
+            document.getElementById("privacyNoticeModal").style.display = "flex"; // Show Privacy Notice Modal
+            // document.getElementById("consentFormModal").style.display = "flex";
         }
 
         function handleFinalConsent() {
