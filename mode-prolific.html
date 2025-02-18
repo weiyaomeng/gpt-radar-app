@@ -1097,18 +1097,24 @@
             } else {
                 submitCorrectLabelsForm();
                 // document.getElementById('welcomeMessage').textContent = `Thank you, ${prolificID}. `;
+                const completionCode = "CJB1L7ZE";
                 document.getElementById('welcomeMessage').textContent = `Challenge Completed!`;
                 document.getElementById('reviewContent').innerHTML = `
                     <p>You got <strong>${correctLabels}</strong> out of <strong>${reviewData.length}</strong> correct!</p>
 
+                    <p style="font-size: 1.2em; color: #d9534f; font-weight: bold;">Your Prolific Completion Code:</p>
+                    <p style="font-size: 1.2em; color: #333; font-weight: bold;">${completionCode}</p>
+                    <p style="font-size: 1.2em;">You only need to use this code if the automatic redirect fails.</p>
+
                     <p style="font-size: 1.2em; color: #d9534f; font-weight: bold;">
-                        Important: Please click the button below to confirm your completion and return to Prolific.
+                        Otherwise, click the button below to confirm your completion and return to Prolific.
                     </p>
 
                     <button onclick="redirectToProlific()" 
                         style="padding: 12px 25px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Complete & Return to Prolific
                     </button>
+
 
                     <hr style="margin: 25px 0;">
 
