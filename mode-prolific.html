@@ -385,7 +385,6 @@
         <label for="llmFamiliarity"><strong>1. How familiar are you with Large Language Models (LLMs)?</strong></label>
         <div class="slider-container">
             <input type="range" id="llmFamiliarity" class="slider" min="1" max="5" step="1" value="3" oninput="updateFamiliarityValue(this.value)" onchange="updateSliderFill()">
-            
             <!-- Tick Marks -->
             <div class="slider-ticks">
                 <span>|</span><span>|</span><span>|</span><span>|</span><span>|</span>
@@ -410,6 +409,22 @@
         <textarea id="llmUsage" placeholder="Briefly describe your experience with LLMs..." rows="4" cols="50"></textarea>
 
         <br><br>
+
+        <!-- Education Background -->
+        <label for="education"><strong>3. What is your highest level of education?</strong></label>
+        <select id="education">
+            <option value="" disabled selected>Select your education level</option>
+            <option value="No formal qualifications">No formal qualifications</option>
+            <option value="Secondary education (e.g. GED/GCSE)">Secondary education (e.g. GED/GCSE)</option>
+            <option value="High school diploma/A-levels">High school diploma/A-levels</option>
+            <option value="Technical/community college">Technical/community college</option>
+            <option value="Undergraduate degree (BA/BSc/other)">Undergraduate degree (BA/BSc/other)</option>
+            <option value="Graduate degree (MA/MSc/Mphil/other)">Graduate degree (MA/MSc/Mphil/other)</option>
+            <option value="Doctorate degree (PhD/other)">Doctorate degree (PhD/other)</option>
+            <option value="Don't know / not applicable">Don't know / not applicable</option>
+        </select>
+        <br><br>
+
         <!-- <button onclick="submitInfoToGoogleForm()">Start Review Task</button> -->
         <button onclick="submitInfoCollection()">Start the Challenge</button>
     </div>
@@ -465,6 +480,7 @@
         let llmFamiliarity = 3;
         let llmFamiliarityText = "Occasionally used";
         let llmUsage = "";
+        let participant_education = "";
         let selectedDecision = "";
         let selectedConfidence = "Moderately Confident"; // Default confidence level
         let startTime = null;
@@ -570,7 +586,7 @@
 
 
         // function submitInfoToGoogleForm(userName0, llmFamiliarityText0, llmUsage0) {
-        function submitInfoToGoogleForm(llmFamiliarityText0, llmUsage0) {
+        function submitInfoToGoogleForm(llmFamiliarityText0, llmUsage0, education0) {
             if (!prolificID || !llmFamiliarityText0 || !llmUsage0) {
                 alert("Please complete all fields before proceeding.");
                 return;
@@ -585,7 +601,10 @@
             formData.append("entry.940612482", sessionID);
             formData.append("entry.2068983905", llmFamiliarityText0); // Familiarity Level
             formData.append("entry.144535932", llmUsage0);        // Usage Purpose
+            formData.append("entry.1022832904", education0);  
             formData.append("entry.2097595769", startTime);  
+
+            console.log("Submitting Form Data:", [...formData.entries()]); // Debugging
 
             // Send the data to Google Form
             fetch(googleFormURL, {
@@ -603,8 +622,9 @@
         function submitInfoCollection() {
             llmFamiliarity = document.getElementById('llmFamiliarity').value;
             llmUsage = document.getElementById('llmUsage').value.trim();
+            participant_education = document.getElementById('education').value.trim();
 
-            if (!llmFamiliarity || !llmUsage) {
+            if (!llmFamiliarity || !llmUsage || !participant_education) {
                 alert("Please complete both questions before proceeding.");
                 return;
             }
@@ -673,7 +693,7 @@
         function startReviewTask() {
             startTime = new Date().toISOString();
             console.log("Review task started at:", startTime);
-            submitInfoToGoogleForm(llmFamiliarityText, llmUsage);
+            submitInfoToGoogleForm(llmFamiliarityText, llmUsage, participant_education);
             // Hide instructions, show review section
             document.getElementById('instructionsContainer').classList.add('hidden');
             document.getElementById('reviewContainer').classList.remove('hidden');
