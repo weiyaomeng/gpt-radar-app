@@ -998,13 +998,13 @@
                 correctLabels++; // Increase the correct label count
             }
 
-            const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScWK8afSc13-Na7AIH0Rf50Vw8x3H7M0IdIGHPQv8l5yWcZeQ/formResponse";
+            const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfcf7srB-wsZGFJPcjVuUjfbQFvNSRdCRWbHC5OrY-DBYEcTQ/formResponse";
             const formData = new URLSearchParams();
-            formData.append("entry.896362160", reviewId);
-            formData.append("entry.1473192954", selectedDecision);
-            formData.append("entry.634150305", userName);
+            formData.append("entry.1616433539", reviewId);
+            formData.append("entry.508326227", selectedDecision);
+            formData.append("entry.269636686", userName);
             // formData.append("entry.941090218", selectedConfidence);
-            formData.append("entry.941090218", selectedConfidence);
+            formData.append("entry.312808116", selectedConfidence);
 
             console.log("Submitting:", [...formData.entries()]);
 
@@ -1049,7 +1049,7 @@
             } else {
                 submitCorrectLabelsForm();
                 // submitCorrectLabelsForm();
-                document.getElementById('welcomeMessage').textContent = `Thank you, ${userName}. Challenge Completed!`;
+                document.getElementById('welcomeMessage').textContent = `Challenge Completed!`;
                 // document.getElementById('reviewContent').innerHTML = "You have completed the challenge!</h2>";
                 // document.getElementById('reviewContent').innerHTML = `
                 //     <h2>You have completed the challenge!</h2>
@@ -1059,18 +1059,19 @@
                 document.getElementById('reviewContent').innerHTML = `
                     <p>You got <strong>${correctLabels}</strong> out of <strong>${reviewData.length}</strong> correct!</p>
 
-                    <p>Please click the Completion button below to log your completion. It will redirect you to the leaderboard.</p>
-                    <button onclick="redirectToLeaderboard()" 
-                        style="padding: 12px 25px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Complete & Return to Leaderboard
-                    </button>
-
                     <h3>We’d love to hear your feedback! (Optional) 😊</h3>
                     <textarea id="feedbackText" placeholder="Enter your feedback here..." rows="4" cols="50" style="width: 60%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;"></textarea>
 
-                    <br><br>
+                    <br>
                     <button onclick="submitFeedback()" style="padding: 10px 20px; font-size: 1.1rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Submit Feedback
+                    </button>
+
+                    <br><br>
+                    <p>Thank you, ${userName}. </p>
+                    <button onclick="redirectToLeaderboard()" 
+                        style="padding: 12px 25px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Complete & Return to Leaderboard
                     </button>
                 `;
                 
@@ -1126,7 +1127,7 @@
         }
 
         function loadParticipantInfo() {
-            fetch('assets/mode-public-info-participants.html')
+            fetch('assets/mode-public-info.html')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
