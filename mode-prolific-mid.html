@@ -687,6 +687,7 @@
             // Convert and clean review data
             reviewData = data.filter(row => row.parent_asin && row.text && row.label).map(row => {
                 return {
+                    id: row.id ? row.id.trim() : (row.review_id ? row.review_id.trim() : null),
                     parent_asin: row.parent_asin.trim(),
                     text: row.text.trim(),
                     title: row.title ? row.title.trim() : "No Title",
@@ -725,6 +726,7 @@
             // Convert and clean review data
             let filteredData = data.filter(row => row.parent_asin && row.text && row.label).map(row => {
                 return {
+                    id: row.id ? row.id.trim() : (row.review_id ? row.review_id.trim() : null),
                     parent_asin: row.parent_asin.trim(),
                     text: row.text.trim(),
                     title: row.title ? row.title.trim() : "No Title",
@@ -766,6 +768,7 @@
             // Convert and clean review data
             reviewData = data.filter(row => row.parent_asin && row.text && row.label).map(row => {
                 return {
+                    id: row.id ? row.id.trim() : (row.review_id ? row.review_id.trim() : null),
                     parent_asin: row.parent_asin.trim(),
                     text: row.text.trim(),
                     title: row.title ? row.title.trim() : "No Title",
