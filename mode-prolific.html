@@ -992,7 +992,9 @@
                       <div class="rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
                       <h3 class="review-title">${review.title}</h3>
                       <p class="review-text">${review.text}</p>
-                      <p class="helpful">${review.helpful_vote} people found this helpful</p>
+                      <p class="helpful">
+                        ${review.helpful_vote} ${review.helpful_vote === 1 ? 'person' : 'people'} found this helpful
+                    </p>
 
                       <!-- Step 1: Select Fake or Real -->
                       <div class="classification">
