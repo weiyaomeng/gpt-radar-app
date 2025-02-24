@@ -167,6 +167,75 @@
     white-space: nowrap;
 }
 
+/* Ensure tick marks and labels are properly spaced */
+.info-slider-container .slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #333;
+    padding: 0 5px;
+    margin-top: -5px;
+    position: relative;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.info-slider-container .slider-scale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 8px;
+    padding: 0 5px;
+    width: 100%;
+    flex-wrap: wrap;  /* Ensures wrapping on smaller screens */
+}
+
+/* Ensure labels do not overlap */
+.info-slider-container .slider-scale span {
+    flex-grow: 1;
+    text-align: center;
+    min-width: 60px;
+    white-space: nowrap;
+    font-size: 12px; /* Smaller text for smaller screens */
+}
+
+/* Ensure better alignment for mobile */
+@media (max-width: 600px) {
+    .info-slider-container .slider-ticks {
+        font-size: 12px;
+        padding: 0 2px;
+    }
+
+    .info-slider-container .slider-scale span {
+        min-width: auto;
+        font-size: 11px;
+        text-align: center;
+        white-space: normal; /* Allows wrapping */
+    }
+
+    .info-slider-container {
+        max-width: 100%; /* Prevents overflow */
+    }
+
+    .info-slider-container input[type="range"] {
+        height: 6px; /* Adjust thickness */
+    }
+}
+
+.vas-labels {
+    position: absolute;
+    width: 100%;
+    top: 25px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555;
+    padding: 0 5px;
+    white-space: nowrap;
+}
+
 
       h1, h2 {
           font-size: 2.5em;
@@ -456,36 +525,74 @@
         cursor: not-allowed;
     }
 
-      /* ✅ Mobile Responsive Fix */
-      @media (max-width: 768px) {
-            .slider-scale {
-                font-size: 12px;
-            }
-            .slider-scale span {
-                min-width: 60px;
-            }
-          .review-content {
-              flex-direction: column;
-              align-items: center;
-          }
+      /* Responsive font sizes for mobile devices */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px; /* Set base font size for readability */
+    }
 
-          .product-info {
-              text-align: center;
-              margin-bottom: 20px;
-          }
+    h1 {
+        font-size: 2em; /* Reduce header size for mobile */
+    }
 
-          .review-info {
-              padding-left: 0;
-          }
+    h2 {
+        font-size: 1.5em;
+    }
 
-          .classification {
-              flex-direction: column;
-          }
+    p, label, button {
+        font-size: 1rem; /* Ensures text scales down */
+    }
 
-          .classification button {
-              width: 100%;
-          }
-      }
+    .slider-scale span {
+        font-size: 12px; /* Reduce slider label size */
+    }
+
+    .info-slider-container .slider-ticks {
+        font-size: 10px; /* Smaller tick labels */
+    }
+
+    .vas-labels {
+        font-size: 12px; /* Smaller labels for confidence slider */
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .review-content {
+        flex-direction: column; /* Stack elements instead of side-by-side */
+        align-items: center;
+    }
+
+    .product-info {
+        text-align: center; /* Center product info for better readability */
+        padding-right: 0;
+        padding-bottom: 20px; /* Add space between product and review */
+        width: 100%;
+    }
+
+    .review-info {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .product-info img {
+        max-width: 100%; /* Ensure image scales properly */
+        height: auto;
+    }
+
+    .classification {
+        flex-direction: column; /* Stack buttons */
+        gap: 10px;
+    }
+
+    .classification button {
+        width: 100%;
+    }
+
+}
+
 
     </style>
 </head>
@@ -631,12 +738,16 @@
             </p>
         
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                You will be presented with one review at a time. 
+                You will review one product review at a time.
             </p>
-
+            
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                On the left side of the screen, you will find the product information, while the review appears on the right. Your task is to determine whether the review is human-written (Real) or AI-generated (Fake). Use your best judgment and indicate your confidence level for each decision. 
+                On larger screens, product information will appear on the left, while the review will be on the right. Your task is to determine whether the review is human-written (<strong>Real</strong>) or AI-generated (<strong>Fake</strong>). Use your best judgment and indicate your confidence level for each decision.
             </p>
+            
+            <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
+                If you are using a mobile device, the layout may adjust—product information might appear at the top, followed by the review. Regardless of the layout, the task remains the same.
+            </p>            
         
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
                 You will read a total of 50 short product reviews, which should take approximately 10 minutes to complete.
@@ -1133,7 +1244,7 @@
             const reviewHTML = `
                 <div class="review-content">
                     <div class="product-info">
-                        <h3>${product.title}</h3>
+                        <h4>${product.title}</h4>
                         <p><strong>Price:</strong> $${product.price}</p>
                         <p><strong>Rating:</strong> ${product.average_rating} (${product.rating_number} reviews)</p>
                         <div class="product-image">
@@ -1426,6 +1537,19 @@
         // Load the modal on page load
         // window.addEventListener("DOMContentLoaded", loadParticipantInfo);
         window.onload = loadParticipantInfo;
+
+        function adjustFontSize() {
+            if (window.innerWidth < 768) {
+                document.body.style.fontSize = "16px";
+            } else {
+                document.body.style.fontSize = "18px";
+            }
+        }
+
+        window.addEventListener("resize", adjustFontSize);
+        window.onload = adjustFontSize;
+
+
 
     </script>
 
