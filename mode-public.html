@@ -631,6 +631,15 @@
 
         <p>Your responses will be <strong>recorded</strong> and may be used for research purpose. </p>
 
+        <!-- Experience with the test -->
+        <label for="testExperience"><strong>Have you taken this test before?</strong></label>
+        <select id="testExperience" name="testExperience" required>
+            <option value="" disabled selected>Select</option>
+            <option value="first-time">This is my first time</option>
+            <option value="few-times">I've tried it a few times before (2-5 times)</option>
+            <option value="many-times">I've taken this test multiple times</option>
+        </select>
+
         <!-- Country of Birth (Allow Manual Entry) -->
         <label for="countryBirth">Country of Birth:</label>
         <input type="text" id="countryBirth" name="countryBirth" placeholder="Enter your country of birth" required>
@@ -791,6 +800,7 @@
         let firstLanguage = "";
         let ethnicity = "Other";
         let sex = "Prefer not to say";
+        let testExperience = "";
 
 
         let llmFamiliarity = 3;
@@ -854,6 +864,7 @@
             formData.append("entry.1619751762", firstLanguage);
             formData.append("entry.1872206189", ethnicity);
             formData.append("entry.1543132564", sex);
+            formData.append("entry.895500260", testExperience);
 
             formData.append("entry.818497327", llmFamiliarityText0); // Familiarity Level
             formData.append("entry.231004760", llmUsage0);        // Usage Purpose
@@ -883,6 +894,7 @@
             firstLanguage = document.getElementById('firstLanguage').value.trim();
             ethnicity = document.getElementById('ethnicity').value.trim();
             sex = document.getElementById('sex').value.trim();
+            testExperience = document.getElementById('testExperience').value.trim();
 
             llmFamiliarity = document.getElementById('llmFamiliarity').value.trim();
             llmUsage = document.getElementById('llmUsage').value.trim();
