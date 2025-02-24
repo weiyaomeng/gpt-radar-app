@@ -1,0 +1,100 @@
+<!-- Info Collection Container -->
+<div class="info-container hidden" id="infoCollectionContainer">
+    <h1>Tell us about yourself</h1>
+    <br>
+
+    <!-- Country of Birth (Allow Manual Entry) -->
+    <label for="countryBirth">Country of Birth:</label>
+    <input type="text" id="countryBirth" name="countryBirth" placeholder="Enter your country of birth" required>
+
+    <!-- Birth Month & Year -->
+    <label>Birth Month & Year:</label>
+    <div class="birthday-container">
+        <select id="birthMonth" required>
+            <option value="" disabled selected>Month</option>
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+        </select>
+        <input type="number" id="birthYear" placeholder="Year" min="1900" max="2024" required>
+    </div>
+
+    <!-- Ethnic Group -->
+    <label for="ethnicity">What ethnic group do you belong to?:</label>
+    <select id="ethnicity" name="ethnicity" required>
+        <option value="" disabled selected>Select</option>
+        <option value="White">White</option>
+        <option value="Black">Black</option>
+        <option value="Asian">Asian</option>
+        <option value="Mixed">Mixed</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <!-- Sex (Legal) -->
+    <label for="sex">What is your sex, as recorded on legal/official documents?:</label>
+    <select id="sex" name="sex" required>
+        <option value="" disabled selected>Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Prefer not to say">Prefer not to say</option>
+    </select>
+
+    <!-- First Language -->
+    <label for="firstLanguage">What is your first language?:</label>
+    <input type="text" id="firstLanguage" name="firstLanguage" placeholder="Enter your first language" required>
+
+    <!-- Education Level -->
+    <label for="education">Which of these is the highest level of education you have completed?:</label>
+    <select id="education" name="education" required>
+        <option value="No formal qualifications">No formal qualifications</option>
+        <option value="Secondary education (e.g. GED/GCSE)">Secondary education (e.g. GED/GCSE)</option>
+        <option value="High school diploma/A-levels">High school diploma/A-levels</option>
+        <option value="Technical/community college">Technical/community college</option>
+        <option value="Undergraduate degree (BA/BSc/other)">Undergraduate degree (BA/BSc/other)</option>
+        <option value="Graduate degree (MA/MSc/Mphil/other)">Graduate degree (MA/MSc/Mphil/other)</option>
+        <option value="Doctorate degree (PhD/other)">Doctorate degree (PhD/other)</option>
+        <option value="Don't know / not applicable">Don't know / not applicable</option>
+    </select>
+
+    <!-- <p>Before starting, please answer a few quick questions about your experience with AI and Large Language Models (LLMs).</p> -->
+    <!-- Familiarity with LLMs -->
+    <label for="llmFamiliarity"><strong>How familiar are you with Large Language Models (LLMs)?</strong></label>
+    <div class="info-slider-container">
+        <input type="range" id="llmFamiliarity" class="slider" min="1" max="5" step="1" value="3" oninput="updateFamiliarityValue(this.value)" onchange="updateSliderFill()">
+        <!-- Tick Marks -->
+        <div class="slider-ticks">
+            <span>|</span><span>|</span><span>|</span><span>|</span><span>|</span>
+        </div>
+
+        <!-- Labels for Each Tick -->
+        <div class="slider-scale">
+            <span>Never used</span>
+            <span>Heard of it</span>
+            <span>Occasionally used</span>
+            <span>Regular user</span>
+            <span>Use professionally</span>
+        </div>
+    </div>
+    <br><br>
+    <p><strong>Your selection:</strong> <span id="familiarityValue">Occasionally used</span></p>
+
+    <br><br>
+
+    <!-- Usage of LLMs -->
+    <label for="llmUsage"><strong>How do you use LLMs in your daily life or work?</strong></label><br>
+    <textarea id="llmUsage" placeholder="Briefly describe your experience with LLMs..." rows="4" cols="50"></textarea>
+
+    <br><br>
+
+    <!-- <button onclick="submitInfoToGoogleForm()">Start Review Task</button> -->
+    <button onclick="submitInfoCollection()">Start the Challenge</button>
+</div>

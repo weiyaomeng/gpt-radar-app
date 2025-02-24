@@ -15,6 +15,10 @@
           padding: 0;
       }
 
+      .text-left {
+            text-align: left;
+        }
+
       .container {
           width: 80%;
           max-width: 1200px;
@@ -25,6 +29,144 @@
           box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
           text-align: center;
       }
+
+      /* New style for infoCollectionContainer */
+.info-container {
+    width: 80%;
+    max-width: 700px;  /* Slightly larger than the default container */
+    margin: 40px auto;
+    background: #f4f4f4;  /* Light grey background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    border-left: 5px solid #007bff; /* Blue side accent */
+}
+
+/* Style labels and inputs separately */
+.info-container label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    color: #333;
+}
+
+/* Make form fields more readable */
+.info-container input,
+.info-container select,
+.info-container textarea {
+    width: 100%;
+    max-width: 450px;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: white;
+}
+
+/* Style the birthday inputs separately */
+.birthday-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    max-width: 450px;
+}
+
+/* Style the submit button */
+.info-container button {
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.info-container button:hover {
+    background-color: #0056b3;
+}
+
+/* New style for questionnaire slider */
+.info-slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Style the slider bar */
+.info-slider-container input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 8px;
+    background: linear-gradient(to right, #007bff 50%, #ddd 50%);
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+/* Style the thumb (handle) */
+.info-slider-container input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid white;
+    transition: 0.2s;
+}
+
+.info-slider-container input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Thumb Hover Effect */
+.info-slider-container input[type="range"]::-webkit-slider-thumb:hover {
+    background: #0056b3;
+}
+
+/* Slider Tick Marks */
+.info-slider-container .slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #333;
+    padding: 0 10px;
+    margin-top: -5px;
+}
+
+/* Labels with Even Spacing */
+.info-slider-container .slider-scale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+    padding: 0 5px;
+}
+
+.info-slider-container .slider-scale span {
+    flex-grow: 1;
+    text-align: center;
+    min-width: 80px;
+    white-space: nowrap;
+}
+
 
       h1, h2 {
           font-size: 2.5em;
@@ -146,7 +288,8 @@
       }
 
       .slider-container {
-          position: relative;
+          /* position: relative; */
+          position:left;
           width: 100%;
           max-width: 600px;
           margin: 20px auto;
@@ -314,12 +457,6 @@
         cursor: not-allowed;
     }
 
-    #studyContainer {
-        display: none;
-    }
-
-
-
       /* ✅ Mobile Responsive Fix */
       @media (max-width: 768px) {
             .slider-scale {
@@ -361,7 +498,6 @@
         <h1>Fake or Fact: Who Has Got the GPT Radar?</h1>
         <h2 style="font-size: 1.5em; color: #007bff;margin-bottom: 20px;">Open for Public Participants</h2><br>
         <p style="margin-bottom: 20px; font-size: 1.2em; color: #555;">Before starting the task, enter your username:</p>
-        <p style="font-weight: bold; margin-bottom: 20px; color: #333;">Your user name will be displayed in the leaderboard.</p>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 400px; margin: 0 auto;">
             <input 
                 type="text" 
@@ -377,21 +513,85 @@
         </div>
         <br>
         <p style="margin-top: 20px; font-size: 1.1em; color: #555;">
-            <strong>Note:</strong> If you would not like your username display, please leave a feedback at the end of the test.
+            <strong>Note:</strong> Your user name and score will be displayed in a leaderboard. <br><br>
+            If you would not like your username display, please leave a feedback at the end of the test.
         </p>
     </div>
 
     <!-- Info Collection Container -->
-    <div class="container hidden" id="infoCollectionContainer">
-        <h1>Pre-Task Questionnaire</h1>
+    <div class="info-container hidden" id="infoCollectionContainer">
+        <h1>Tell us about yourself</h1>
         <br>
-        <p>Before starting, please answer a few quick questions about your experience with AI and Large Language Models (LLMs).</p>
-        
+
+        <p>Your responses will be <strong>recorded</strong> and may be used for research purpose. </p>
+
+        <!-- Country of Birth (Allow Manual Entry) -->
+        <label for="countryBirth">Country of Birth:</label>
+        <input type="text" id="countryBirth" name="countryBirth" placeholder="Enter your country of birth" required>
+
+        <!-- Birth Month & Year -->
+        <label>Birth Month & Year:</label>
+        <div class="birthday-container">
+            <select id="birthMonth" required>
+                <option value="" disabled selected>Month</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+            <input type="number" id="birthYear" placeholder="Year" min="1900" max="2024" required>
+        </div>
+
+        <!-- Ethnic Group -->
+        <label for="ethnicity">What ethnic group do you belong to?:</label>
+        <select id="ethnicity" name="ethnicity" required>
+            <option value="" disabled selected>Select</option>
+            <option value="White">White</option>
+            <option value="Black">Black</option>
+            <option value="Asian">Asian</option>
+            <option value="Mixed">Mixed</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <!-- Sex (Legal) -->
+        <label for="sex">What is your sex, as recorded on legal/official documents?:</label>
+        <select id="sex" name="sex" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+
+        <!-- First Language -->
+        <label for="firstLanguage">What is your first language?:</label>
+        <input type="text" id="firstLanguage" name="firstLanguage" placeholder="Enter your first language" required>
+
+        <!-- Education Level -->
+        <label for="education">Which of these is the highest level of education you have completed?:</label>
+        <select id="education" name="education" required>
+            <option value="No formal qualifications">No formal qualifications</option>
+            <option value="Secondary education (e.g. GED/GCSE)">Secondary education (e.g. GED/GCSE)</option>
+            <option value="High school diploma/A-levels">High school diploma/A-levels</option>
+            <option value="Technical/community college">Technical/community college</option>
+            <option value="Undergraduate degree (BA/BSc/other)">Undergraduate degree (BA/BSc/other)</option>
+            <option value="Graduate degree (MA/MSc/Mphil/other)">Graduate degree (MA/MSc/Mphil/other)</option>
+            <option value="Doctorate degree (PhD/other)">Doctorate degree (PhD/other)</option>
+            <option value="Don't know / not applicable">Don't know / not applicable</option>
+        </select>
+
+        <!-- <p>Before starting, please answer a few quick questions about your experience with AI and Large Language Models (LLMs).</p> -->
         <!-- Familiarity with LLMs -->
-        <label for="llmFamiliarity"><strong>1. How familiar are you with Large Language Models (LLMs)?</strong></label>
-        <div class="slider-container">
+        <label for="llmFamiliarity"><strong>How familiar are you with Large Language Models (LLMs)?</strong></label>
+        <div class="info-slider-container">
             <input type="range" id="llmFamiliarity" class="slider" min="1" max="5" step="1" value="3" oninput="updateFamiliarityValue(this.value)" onchange="updateSliderFill()">
-            
             <!-- Tick Marks -->
             <div class="slider-ticks">
                 <span>|</span><span>|</span><span>|</span><span>|</span><span>|</span>
@@ -412,24 +612,9 @@
         <br><br>
 
         <!-- Usage of LLMs -->
-        <label for="llmUsage"><strong>2. How do you use LLMs in your daily life or work?</strong></label><br>
+        <label for="llmUsage"><strong>How do you use LLMs in your daily life or work?</strong></label><br>
         <textarea id="llmUsage" placeholder="Briefly describe your experience with LLMs..." rows="4" cols="50"></textarea>
 
-        <br><br>
-
-        <!-- Education Background -->
-        <label for="education"><strong>3. What is your highest level of education?</strong></label>
-        <select id="education">
-            <option value="" disabled selected>Select your education level</option>
-            <option value="No formal qualifications">No formal qualifications</option>
-            <option value="Secondary education (e.g. GED/GCSE)">Secondary education (e.g. GED/GCSE)</option>
-            <option value="High school diploma/A-levels">High school diploma/A-levels</option>
-            <option value="Technical/community college">Technical/community college</option>
-            <option value="Undergraduate degree (BA/BSc/other)">Undergraduate degree (BA/BSc/other)</option>
-            <option value="Graduate degree (MA/MSc/Mphil/other)">Graduate degree (MA/MSc/Mphil/other)</option>
-            <option value="Doctorate degree (PhD/other)">Doctorate degree (PhD/other)</option>
-            <option value="Don't know / not applicable">Don't know / not applicable</option>
-        </select>
         <br><br>
 
         <!-- <button onclick="submitInfoToGoogleForm()">Start Review Task</button> -->
@@ -447,9 +632,17 @@
             </p>
         
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
-                You will be presented with one review at a time. On the left side of the screen, you will find the product information, while the review appears on the right. Your task is to determine whether the review is human-written (Real) or AI-generated (Fake). Use your best judgment and indicate your confidence level for each decision.
+                You will be presented with one review at a time. 
+            </p>
+
+            <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
+                On the left side of the screen, you will find the product information, while the review appears on the right. Your task is to determine whether the review is human-written (Real) or AI-generated (Fake). Use your best judgment and indicate your confidence level for each decision. 
             </p>
         
+            <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
+                You will read a total of 50 short product reviews, which should take approximately 10 minutes to complete.
+            </p>
+
             <p style="text-align: left; max-width: 600px; margin: 20px auto; line-height: 1.6;">
                 <strong>Important:</strong> <br>
                 Refreshing or leaving the page will reset your progress, requiring you to start over. Please avoid navigating away during the challenge.
@@ -481,6 +674,15 @@
         let currentReviewIndex = 0;
         let userName = "";
         let correctLabels = 0;
+
+        let countryBirth = "";
+        let birthYear = "";
+        let birthMonth = "";
+        let firstLanguage = "";
+        let ethnicity = "Other";
+        let sex = "Prefer not to say";
+
+
         let llmFamiliarity = 3;
         let llmFamiliarityText = "Occasionally used";
         let llmUsage = "";
@@ -529,11 +731,20 @@
                 alert("Please complete all fields before proceeding.");
                 return;
             }
+
             // Replace with your actual Google Form URL
             const googleFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSedZvdVAo1Op214sUlrWcOxnc_tgjCo2Vwnmsz8GBerRmvx9Q/formResponse";
             // Replace with actual entry IDs from your form
             const formData = new URLSearchParams();
             formData.append("entry.1005788273", userName0);        // Participant ID
+
+            formData.append("entry.1828249938", countryBirth);
+            formData.append("entry.743628474", birthYear);
+            formData.append("entry.1592685853", birthMonth);
+            formData.append("entry.1619751762", firstLanguage);
+            formData.append("entry.1872206189", ethnicity);
+            formData.append("entry.1543132564", sex);
+
             formData.append("entry.818497327", llmFamiliarityText0); // Familiarity Level
             formData.append("entry.231004760", llmUsage0);        // Usage Purpose
             formData.append("entry.1523787583", education0); 
@@ -555,12 +766,20 @@
         }
 
         function submitInfoCollection() {
-            llmFamiliarity = document.getElementById('llmFamiliarity').value;
+
+            countryBirth = document.getElementById('countryBirth').value;
+            birthYear = document.getElementById('birthYear').value.trim();
+            birthMonth = document.getElementById('birthMonth').value.trim();
+            firstLanguage = document.getElementById('firstLanguage').value.trim();
+            ethnicity = document.getElementById('ethnicity').value.trim();
+            sex = document.getElementById('sex').value.trim();
+
+            llmFamiliarity = document.getElementById('llmFamiliarity').value.trim();
             llmUsage = document.getElementById('llmUsage').value.trim();
             participant_education = document.getElementById('education').value.trim();
 
             if (!llmFamiliarity || !llmUsage || !participant_education) {
-                alert("Please complete both questions before proceeding.");
+                alert("Please complete all fields before proceeding");
                 return;
             }
 
@@ -1070,7 +1289,6 @@
                     </button>
 
                     <br><br>
-                    <p>Thank you, ${userName}. </p>
                     <button onclick="redirectToLeaderboard()" 
                         style="padding: 12px 25px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Complete & Return to Leaderboard
@@ -1145,40 +1363,6 @@
                 .catch(error => console.error('Error loading participant info:', error));
         }
 
-        // Function to handle modal behavior
-        // function setupModals() {
-        //     document.getElementById("readMoreButton").addEventListener("click", function () {
-        //         document.getElementById("initialMessage").style.display = "none"; // Hide first sentence
-        //         document.getElementById("fullInfo").style.display = "block"; // Show full information
-        //         this.style.display = "none"; // Hide "Read More" button
-        //     });
-
-        //     document.getElementById("agreeButton").addEventListener("click", function () {
-        //         document.getElementById("participantModal").style.display = "none";
-        //         document.getElementById("consentFormModal").style.display = "flex";
-        //     });
-
-        //     document.querySelectorAll(".consent-checkbox").forEach(checkbox => {
-        //         checkbox.addEventListener("change", function () {
-        //             const allChecked = [...document.querySelectorAll(".consent-checkbox")].every(cb => cb.checked);
-        //             document.getElementById("finalConsentButton").disabled = !allChecked;
-        //         });
-        //     });
-
-        //     document.getElementById("finalConsentButton").addEventListener("click", function () {
-        //         document.getElementById("consentFormModal").style.display = "none";
-        //         alert("Thank you! You will now start the study.");
-        //         // document.getElementById("studyContainer").style.display = "block"; // Show study content
-        //         let studyContainer = document.getElementById("studyContainer");
-    
-        //         if (studyContainer) {
-        //             studyContainer.style.display = "block"; // ✅ Only modify if it exists
-        //         } else {
-        //             console.warn("⚠️ 'studyContainer' not found. Ensure it exists in the DOM.");
-        //         }
-        //         // Redirect or show next section
-        //     });
-        // }
         function setupModals() {
             const readMoreButton = document.getElementById("readMoreButton");
             const agreeButton = document.getElementById("agreeButton");
@@ -1230,14 +1414,6 @@
 
         function handleFinalConsent() {
             document.getElementById("consentFormModal").style.display = "none";
-
-            let studyContainer = document.getElementById("studyContainer");
-            if (studyContainer) {
-                studyContainer.style.display = "block";
-            } else {
-                console.log("⚠️ 'studyContainer' not found. Ensure it exists in the DOM.");
-            }
-
             alert("Thank you! You will now start the study.");
         }
 
@@ -1250,8 +1426,38 @@
         // window.addEventListener("DOMContentLoaded", loadParticipantInfo);
         window.onload = loadParticipantInfo;
 
-
-
     </script>
+
+    <footer style="text-align: center; padding: 15px; background-color: #f8f9fa; color: #555; font-size: 0.9em; margin-top: 40px; border-top: 1px solid #ddd;">
+        <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
+
+        <!-- <p><strong>Maintained by:</strong> Weiyao Meng</p> -->
+
+        <!-- <hr style="border: 0.5px solid #ddd; width: 80%; margin: 15px auto;"> -->
+
+        <p>
+            <!-- <button onclick="window.location.href='cookie-policy.html'" style="background: none; border: none; color: #007bff; font-size: 0.9em; cursor: pointer;">Cookie Policy</button> |
+            <button onclick="window.location.href='accessibility-statement.html'" style="background: none; border: none; color: #007bff; font-size: 0.9em; cursor: pointer;">Accessibility Statement</button> |
+            <button onclick="window.location.href='privacy-notice.html'" style="background: none; border: none; color: #007bff; font-size: 0.9em; cursor: pointer;">Privacy Notice</button> | -->
+            <button onclick="showContactInfo()" style="background: none; border: none; color: #007bff; font-size: 0.9em; cursor: pointer;">Contact</button> |
+            <button onclick="window.open('https://sites.google.com/view/gpt-radar', '_blank')" style="background: none; border: none; color: #007bff; font-size: 0.9em; cursor: pointer;">Leaderboard</button>
+        </p>
+    </footer>
+
+    <script>
+        document.getElementById("lastUpdated").textContent = new Date(document.lastModified).toLocaleString();
+
+        function showContactInfo() {
+            alert("For inquiries, please contact:\n\nWeiyao Meng - Researcher\nEmail: weiyao.meng2@nottingham.ac.uk\n\nJohn Harvey\nEmail: john.harvey2@nottingham.ac.uk");
+        }
+    </script>
+
+
+
+
+
+
+
+
 </body>
 </html>
