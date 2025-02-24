@@ -1471,7 +1471,7 @@
         }
 
         function loadParticipantInfo() {
-            fetch('assets/mode-public-info.html')
+            fetch('assets/public-info.html')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1558,10 +1558,9 @@
             }
         }
 
+        // Use addEventListener instead of assigning directly to window.onload
         window.addEventListener("resize", adjustFontSize);
-        window.onload = adjustFontSize;
-
-
+        window.addEventListener("load", adjustFontSize);
 
     </script>
 
