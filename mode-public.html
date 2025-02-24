@@ -288,8 +288,7 @@
       }
 
       .slider-container {
-          /* position: relative; */
-          position:left;
+          position: relative;
           width: 100%;
           max-width: 600px;
           margin: 20px auto;
@@ -1074,6 +1073,8 @@
             let slider = document.getElementById("confidenceVAS");
             let percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
             slider.style.background = `linear-gradient(to right, #007bff ${percentage}%, #ddd ${percentage}%)`;
+
+            document.getElementById("confidenceDisplay").textContent = slider.value;
         }
 
         function captureConfidenceValue() {
