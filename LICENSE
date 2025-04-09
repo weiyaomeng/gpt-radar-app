@@ -1,6 +1,6 @@
 This repository contains both data and code, released under the following licenses:
 
-- The **data** (including all files in .csv and .xlsx formats) is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license.
+- The **data** (including all files in data/) is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license.
   - https://creativecommons.org/licenses/by/4.0/
 
 - The **code** (including all HTML scripts) is licensed under the **MIT License**.
