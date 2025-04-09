@@ -8,12 +8,12 @@ This repository includes the resources of the GPT Radar study, including code an
 
 If you use this dataset, **please cite the following**:
 
-> [APA]Weiyao Meng. (2025). weiyaomeng/gpt-radar-app: Public release v1.1 (update). Zenodo. https://doi.org/10.5281/zenodo.15185950
+> [APA]Weiyao Meng. (2025). weiyaomeng/gpt-radar-app: Public release v1.1 (update). Zenodo. https://doi.org/10.5281/zenodo.15185816
 
 > [full paper citation in preparation]  
 
 Alternatively, cite the Zenodo DOI:
-> [[10.5281/zenodo.15185950](https://doi.org/10.5281/zenodo.15185950)]
+> [[10.5281/zenodo.15185816](https://doi.org/10.5281/zenodo.15185816)]
 
 ## License
 
